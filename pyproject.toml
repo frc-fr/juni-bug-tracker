@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "junibugs"
+version = "0.1.0"
+description = "Structured Junos OS bug data extracted from the official Release Notes PDFs"
+requires-python = ">=3.9"
+license = {text = "AGPL-3.0-or-later"}
+dependencies = ["requests>=2.31", "pymupdf==1.26.5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+junibugs = "junibugs.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["corpus: needs the downloaded PDFs in .cache/pdfs"]

@@ -1,0 +1,504 @@
+{
+  "versions": [
+    {
+      "system": "evo",
+      "version": "22.1R1",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-evo-release-notes-22.1r1/junos-evo-release-notes-22.1r1.pdf",
+      "etag": "63067-63ee59e263180",
+      "last_modified": "Tue, 16 Sep 2025 06:56:22 GMT",
+      "size": 405607,
+      "sha256": "1b1ee072beea5e1a81ea43307a394b9cabb06aef0ec89c1c595bd2e0409c9301"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R2",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-evo-release-notes-22.1r2/junos-evo-release-notes-22.1r2.pdf",
+      "etag": "30c05-6028e00c84380",
+      "last_modified": "Thu, 10 Aug 2023 09:13:02 GMT",
+      "size": 199685,
+      "sha256": "f0e85e7c38433b7cb1d4b3b08fe0129013dc5fbbb542d6d7ecb7b236c1e18d7d"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-evo-release-notes-22.1r3/junos-evo-release-notes-22.1r3.pdf",
+      "etag": "2fd11-6028e0a7f7240",
+      "last_modified": "Thu, 10 Aug 2023 09:15:45 GMT",
+      "size": 195857,
+      "sha256": "0dcb80a0ca2fc36c22a5c4e5c747217f45519b42c685db14bb441336eeac0bfe"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R1",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-evo-release-notes-22.2r1/junos-evo-release-notes-22.2r1.pdf",
+      "etag": "77fa1-6316a54025f80",
+      "last_modified": "Fri, 28 Mar 2025 17:23:26 GMT",
+      "size": 491425,
+      "sha256": "bcefc39b81274017654eb9494b94ded7eb91b07e34f0a6ea1d00ab658b4cca77"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R2",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-evo-release-notes-22.2r2/junos-evo-release-notes-22.2r2.pdf",
+      "etag": "33f65-6316a5673fbc0",
+      "last_modified": "Fri, 28 Mar 2025 17:24:07 GMT",
+      "size": 212837,
+      "sha256": "c999cb31a48b455efe228b545bfdd252d3ea5cf9bd6bb6883b59473e9b2649c3"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-evo-release-notes-22.2r3/junos-evo-release-notes-22.2r3.pdf",
+      "etag": "33336-6316b25d14f80",
+      "last_modified": "Fri, 28 Mar 2025 18:22:06 GMT",
+      "size": 209718,
+      "sha256": "0e19c57ec9f61c51d92774423352552c31a6eae3b128119106d4ec0a664ecb96"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R1",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-evo-release-notes-22.3r1/junos-evo-release-notes-22.3r1.pdf",
+      "etag": "7b658-6316b35415640",
+      "last_modified": "Fri, 28 Mar 2025 18:26:25 GMT",
+      "size": 505432,
+      "sha256": "a4bec7ea8fc9ac05a2ab5d2ff239ebea2acc9cc9b557a95eba3840e4bc4f3f92"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R2",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-evo-release-notes-22.3r2/junos-evo-release-notes-22.3r2.pdf",
+      "etag": "27f77-6316b02fb7aa0",
+      "last_modified": "Fri, 28 Mar 2025 18:12:21 GMT",
+      "size": 163703,
+      "sha256": "570946fe1bcc8f241eb8128ebc93d33856b407377c8d20385f832a8a00012234"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R3",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-evo-release-notes-22.3r3/junos-evo-release-notes-22.3r3.pdf",
+      "etag": "2d198-6316b08d98a00",
+      "last_modified": "Fri, 28 Mar 2025 18:14:00 GMT",
+      "size": 184728,
+      "sha256": "7f550e2d43be3a03fa7b43ad1c00d20bdf52b617b09c275fd2b7106d242d22f6"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R1",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-evo-release-notes-22.4r1/junos-evo-release-notes-22.4r1.pdf",
+      "etag": "6aa2e-60aceae88b700",
+      "last_modified": "Thu, 23 Nov 2023 09:44:28 GMT",
+      "size": 436782,
+      "sha256": "b5786b287aa43964ca1ab18aa35a5a7d2cb7e142132717c1eb68e5f5434adbb1"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R2",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-evo-release-notes-22.4r2/junos-evo-release-notes-22.4r2.pdf",
+      "etag": "3384a-647e370bf56c0",
+      "last_modified": "Thu, 08 Jan 2026 17:07:15 GMT",
+      "size": 211018,
+      "sha256": "d1af0312d0e0a8ed02a4415bf3720765b1a42e9ed92207b7d127155ff914867a"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-evo-release-notes-22.4r3/junos-evo-release-notes-22.4r3.pdf",
+      "etag": "35357-647e373032c40",
+      "last_modified": "Thu, 08 Jan 2026 17:07:53 GMT",
+      "size": 217943,
+      "sha256": "f3502cd7877802d9d1b667f80808a3b0ddd059ed849647a26013b49e44967f17"
+    },
+    {
+      "system": "evo",
+      "version": "23.1R1",
+      "branch": "23.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.1/junos-evo-release-notes-23.1r1/junos-evo-release-notes-23.1r1.pdf",
+      "etag": "5d9ec-647e394fcaec0",
+      "last_modified": "Thu, 08 Jan 2026 17:17:23 GMT",
+      "size": 383468,
+      "sha256": "474b0cbcec629939c942db5f3e18c3d20f1146cc05cde6bf576845b09c6a246b"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R1",
+      "branch": "23.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.2/junos-evo-release-notes-23.2r1/junos-evo-release-notes-23.2r1.pdf",
+      "etag": "5f274-647e3ade6db40",
+      "last_modified": "Thu, 08 Jan 2026 17:24:21 GMT",
+      "size": 389748,
+      "sha256": "6df040e3ae72d157b2ff0c106d70eb1cddba98bfbebe6f57282dbfd92dfd62f6"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2",
+      "branch": "23.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.2/junos-evo-release-notes-23.2r2/junos-evo-release-notes-23.2r2.pdf",
+      "etag": "37fcb-647e3b067b9c0",
+      "last_modified": "Thu, 08 Jan 2026 17:25:03 GMT",
+      "size": 229323,
+      "sha256": "f2cf5e645cfcb683c6f82faf49ab7c90a834ba0efc46ae4f3f6d42f3aae56834"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R1",
+      "branch": "23.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.4/junos-evo-release-notes-23.4r1/junos-evo-release-notes-23.4r1.pdf",
+      "etag": "d1fb1-647e3cfb29700",
+      "last_modified": "Thu, 08 Jan 2026 17:33:48 GMT",
+      "size": 860081,
+      "sha256": "70cbfced86e9529f6f19f2475f3abc16ed9a12e82a8b78da88b1d09e7e36e66d"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2",
+      "branch": "23.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.4/junos-evo-release-notes-23.4r2/junos-evo-release-notes-23.4r2.pdf",
+      "etag": "b79c1-6496afad6b500",
+      "last_modified": "Wed, 28 Jan 2026 04:14:44 GMT",
+      "size": 752065,
+      "sha256": "097ce08bd8c855f5ef723551163b1f6799a6f68a3318b6651c9cd76809a39b2a"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R1",
+      "branch": "24.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.2/junos-evo-release-notes-24.2r1/junos-evo-release-notes-24.2r1.pdf",
+      "etag": "855c3-647ecfc89b0c0",
+      "last_modified": "Fri, 09 Jan 2026 04:30:35 GMT",
+      "size": 546243,
+      "sha256": "2590037eba2489da16b70ab40389763a1d1551d6771c23581b52b7331fff89d6"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2",
+      "branch": "24.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.2/junos-evo-release-notes-24.2r2/junos-evo-release-notes-24.2r2.pdf",
+      "etag": "65941-647ecfcd5fc00",
+      "last_modified": "Fri, 09 Jan 2026 04:30:40 GMT",
+      "size": 416065,
+      "sha256": "a8916747213c68b56979e80dbdd564ef93add9b6caf0c27bef27459c10e8a441"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R1",
+      "branch": "24.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.4/junos-evo-release-notes-24.4r1/junos-evo-release-notes-24.4r1.pdf",
+      "etag": "f0ff5-658d411d8dd00",
+      "last_modified": "Wed, 12 Aug 2026 06:55:16 GMT",
+      "size": 987125,
+      "sha256": "2c611f8100c2a95e837cadca46155c097fc1c86f53dba162c5dd7b1ff52ece7a"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2",
+      "branch": "24.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.4/junos-evo-release-notes-24.4r2/junos-evo-release-notes-24.4r2.pdf",
+      "etag": "7ec83-653cafb026000",
+      "last_modified": "Tue, 09 Jun 2026 04:58:40 GMT",
+      "size": 519299,
+      "sha256": "1a447f9359ff6dc5116806e4029a3bc9df3ad0ef295d346ddc1189a335a25af0"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R1",
+      "branch": "25.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.2/junos-evo-release-notes-25.2r1/junos-evo-release-notes-25.2r1.pdf",
+      "etag": "89c51-658daa116ba40",
+      "last_modified": "Wed, 12 Aug 2026 14:44:49 GMT",
+      "size": 564305,
+      "sha256": "e7070c87ac7ef02849383a2aa501e2b7ce9d6097972f255c362d29e3649c2fad"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R2",
+      "branch": "25.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.2/junos-evo-release-notes-25.2r2/junos-evo-release-notes-25.2r2.pdf",
+      "etag": "2b5a2-64c18e01a25c0",
+      "last_modified": "Tue, 03 Mar 2026 06:33:03 GMT",
+      "size": 177570,
+      "sha256": "9f57b62879f361845c3bb3cb13e667cf1360a9d0a35dfacacd48802ca5f9b6ec"
+    },
+    {
+      "system": "evo",
+      "version": "25.4R1",
+      "branch": "25.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.4/junos-evo-release-notes-25.4r1/junos-evo-release-notes-25.4r1.pdf",
+      "etag": "ef6c8-65b9c12d62a45",
+      "last_modified": "Wed, 16 Sep 2026 16:22:29 GMT",
+      "size": 980680,
+      "sha256": "8944c66fdd7cdc60bd2067221a58df347bc8297819b08464768025b4f2af4b54"
+    },
+    {
+      "system": "evo",
+      "version": "26.2R1",
+      "branch": "26.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/rne/us/en/release-notes/Junos%20OS%20Evolved/26.2R1/junos-os-evolved-release-notes-26.2r1.pdf",
+      "sha256": "75e3a042bb27702769f439579197b176ee07f0ee88fb11c60805466a6b897006",
+      "etag": "af7d2-65e6d61123f5b",
+      "last_modified": "Thu, 22 Oct 2026 12:55:33 GMT",
+      "size": 718802
+    },
+    {
+      "system": "junos",
+      "version": "22.1R1",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-release-notes-22.1r1/junos-release-notes-22.1r1.pdf",
+      "etag": "122120-647f9746d1a80",
+      "last_modified": "Fri, 09 Jan 2026 19:23:06 GMT",
+      "size": 1188128,
+      "sha256": "186331c7a18260e6d33585c0ecf96130d2757b6f2baecbab13720c4d6b07a3f0"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R2",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-release-notes-22.1r2/junos-release-notes-22.1r2.pdf",
+      "etag": "b547e-647f97dd7fe00",
+      "last_modified": "Fri, 09 Jan 2026 19:25:44 GMT",
+      "size": 742526,
+      "sha256": "b7e1b5b661e98396f69875733c99040a0f132f7f043d9845b1afaebfe9e19d0f"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3",
+      "branch": "22.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.1/junos-release-notes-22.1r3/junos-release-notes-22.1r3.pdf",
+      "etag": "b5c5a-647f99a743600",
+      "last_modified": "Fri, 09 Jan 2026 19:33:44 GMT",
+      "size": 744538,
+      "sha256": "a4fc42ef6ba5d0b3d39dc5b529bd2c96f209560a7e26987329774271b61844b0"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R1",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-release-notes-22.2r1/junos-release-notes-22.2r1.pdf",
+      "etag": "123502-647f91a018540",
+      "last_modified": "Fri, 09 Jan 2026 18:57:49 GMT",
+      "size": 1193218,
+      "sha256": "b720734d6feb87b29d972b09255efc505c19b91bf858accadbd29fbe5d4d552a"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R2",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-release-notes-22.2r2/junos-release-notes-22.2r2.pdf",
+      "etag": "ad5d4-647f92b3b4f80",
+      "last_modified": "Fri, 09 Jan 2026 19:02:38 GMT",
+      "size": 710100,
+      "sha256": "9b01c696fec3b0e048f7df9b53ed25a5fd80a9c6731e35367401ce063756ff49"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3",
+      "branch": "22.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.2/junos-release-notes-22.2r3/junos-release-notes-22.2r3.pdf",
+      "etag": "bb76e-647f944810980",
+      "last_modified": "Fri, 09 Jan 2026 19:09:42 GMT",
+      "size": 767854,
+      "sha256": "6fc73a2916e2110c6f6b8124a42be4dd4c1c0faac16e1f5e4664d4e1fc0916c8"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R1",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-release-notes-22.3r1/junos-release-notes-22.3r1.pdf",
+      "etag": "f6dc8-647f8d3415680",
+      "last_modified": "Fri, 09 Jan 2026 18:38:02 GMT",
+      "size": 1011144,
+      "sha256": "2765e4dba9bca5dd8e9fca04b5b6ba675756b61542014a4f047aa453149c2f71"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R2",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-release-notes-22.3r2/junos-release-notes-22.3r2.pdf",
+      "etag": "b3577-647f8dcda00c0",
+      "last_modified": "Fri, 09 Jan 2026 18:40:43 GMT",
+      "size": 734583,
+      "sha256": "245c9441283d5f7b4910f48a131294dfb2957008e724993d495d0d5ca08f0a9e"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3",
+      "branch": "22.3",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.3/junos-release-notes-22.3r3/junos-release-notes-22.3r3.pdf",
+      "etag": "c07df-647f8f5c42d40",
+      "last_modified": "Fri, 09 Jan 2026 18:47:41 GMT",
+      "size": 788447,
+      "sha256": "56bf3c0d00d9dd59a38eae2eb71d40354bd909804a7b9ac5ab0ac3920675ce54"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R1",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-release-notes-22.4r1/junos-release-notes-22.4r1.pdf",
+      "etag": "11bd03-656bee0e2d140",
+      "last_modified": "Thu, 16 Jul 2026 18:47:57 GMT",
+      "size": 1162499,
+      "sha256": "75b9f83bb940a09f15b44867330594b00388e0f72ec363e00ba006807ec4d889"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R2",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-release-notes-22.4r2/junos-release-notes-22.4r2.pdf",
+      "etag": "c6d03-656bef23b2000",
+      "last_modified": "Thu, 16 Jul 2026 18:52:48 GMT",
+      "size": 814339,
+      "sha256": "5639a823dd9272aa33d9108b570096e83df9be22d91f1fdfa7f39a3b0c207f37"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3",
+      "branch": "22.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/22.4/junos-release-notes-22.4r3/junos-release-notes-22.4r3.pdf",
+      "etag": "ddf9a-656bf01034e00",
+      "last_modified": "Thu, 16 Jul 2026 18:56:56 GMT",
+      "size": 909210,
+      "sha256": "60c3b89f9e7c5e1614e8ee35a915c3111a0d16a3ff02b28a72c5ffbaf555ca90"
+    },
+    {
+      "system": "junos",
+      "version": "23.1R1",
+      "branch": "23.1",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.1/junos-release-notes-23.1r1/junos-release-notes-23.1r1.pdf",
+      "etag": "f56ea-656d3b077e6c0",
+      "last_modified": "Fri, 17 Jul 2026 19:37:39 GMT",
+      "size": 1005290,
+      "sha256": "9e1acd313cdd35de2473ec24bfd9bbcc5e26876b6ef4d91230093b2ddf2578ca"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R1",
+      "branch": "23.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.2/junos-release-notes-23.2r1/junos-release-notes-23.2r1.pdf",
+      "etag": "eb43b-656d3a107e000",
+      "last_modified": "Fri, 17 Jul 2026 19:33:20 GMT",
+      "size": 963643,
+      "sha256": "0e5d02423538b3677e0d130c8bd5c053649c78d89b37cf3381c24465306a714c"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2",
+      "branch": "23.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.2/junos-release-notes-23.2r2/junos-release-notes-23.2r2.pdf",
+      "etag": "baa0f-656d3dd59c500",
+      "last_modified": "Fri, 17 Jul 2026 19:50:12 GMT",
+      "size": 764431,
+      "sha256": "66446fd6defdff81d75a14efb856db0bb379d8455e688a704c40fded8586f0e1"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R1",
+      "branch": "23.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.4/junos-release-notes-23.4r1/junos-release-notes-23.4r1.pdf",
+      "etag": "135314-65ef67695492e",
+      "last_modified": "Thu, 29 Oct 2026 08:28:24 GMT",
+      "size": 1266452,
+      "sha256": "6e4b2a12a1507a82d9f13be04cbfb479ca3fbf9c7da6656c05d4c072272da3a7"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2",
+      "branch": "23.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/23.4/junos-release-notes-23.4r2/junos-release-notes-23.4r2.pdf",
+      "etag": "9d8cc-65e522fb6c5d3",
+      "last_modified": "Wed, 21 Oct 2026 04:29:01 GMT",
+      "size": 645324,
+      "sha256": "e94e10aa32126d8db8c5ff277b9081f4fe4e21aadf29e087245809c873531d8c"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R1",
+      "branch": "24.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.2/junos-release-notes-24.2r1/junos-release-notes-24.2r1.pdf",
+      "etag": "11da78-65b8a401f7f86",
+      "last_modified": "Tue, 15 Sep 2026 19:06:39 GMT",
+      "size": 1170040,
+      "sha256": "d4fc4299e5842c9db145b68ee276c84798a0cba652738f71d5219fceebda3c1d"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2",
+      "branch": "24.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.2/junos-release-notes-24.2r2/junos-release-notes-24.2r2.pdf",
+      "etag": "afc6c-6574af92df900",
+      "last_modified": "Thu, 23 Jul 2026 17:56:20 GMT",
+      "size": 719980,
+      "sha256": "cf60994a5b98b42e5f5210a4962483393c2fd75aed3fedd56e181a508c31e07a"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R1",
+      "branch": "24.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.4/junos-release-notes-24.4r1/junos-release-notes-24.4r1.pdf",
+      "etag": "11e089-657e3466cebc0",
+      "last_modified": "Fri, 31 Jul 2026 07:38:31 GMT",
+      "size": 1171593,
+      "sha256": "d568d6cfd4b03effc359b585e86c8873b8c55fad175a0cca14565c0d92710476"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R2",
+      "branch": "24.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/24.4/junos-release-notes-24.4r2/junos-release-notes-24.4r2.pdf",
+      "etag": "cfc4f-657e75981bac0",
+      "last_modified": "Fri, 31 Jul 2026 12:30:11 GMT",
+      "size": 851023,
+      "sha256": "566eab2a783ba7100b5e81016132d76ab96b3c8d853cbf39279ce9425069edb3"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R1",
+      "branch": "25.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.2/junos-release-notes-25.2r1/junos-release-notes-25.2r1.pdf",
+      "etag": "fa7a0-65a01786adb80",
+      "last_modified": "Thu, 27 Aug 2026 06:30:22 GMT",
+      "size": 1025952,
+      "sha256": "3cfff5b2b3fee6d7aac1be0b8d2b15aa05a540257b739640f6c35b65b3c59424"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R2",
+      "branch": "25.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.2/junos-release-notes-25.2r2/junos-release-notes-25.2r2.pdf",
+      "etag": "88c4a-65c9b245669f7",
+      "last_modified": "Tue, 29 Sep 2026 08:40:59 GMT",
+      "size": 560202,
+      "sha256": "d85dbc8d0d7b5126d64801b1b5df0f914cb1a9255846827440a0f4c2cb55674f"
+    },
+    {
+      "system": "junos",
+      "version": "25.4R1",
+      "branch": "25.4",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/us/en/software/junos/release-notes/25.4/junos-release-notes-25.4r1/junos-release-notes-25.4r1.pdf",
+      "etag": "fb77b-65c3e5c5a1943",
+      "last_modified": "Thu, 24 Sep 2026 17:59:27 GMT",
+      "size": 1030011,
+      "sha256": "481640640ad754330164319ac119d576151e851f9b7080ecd36df2121a4c7bc6"
+    },
+    {
+      "system": "junos",
+      "version": "26.2R1",
+      "branch": "26.2",
+      "pdf_url": "https://networkingdocs.hpe.com/documentation/rne/us/en/release-notes/Junos%20OS/26.2R1/junos-os-release-notes-26.2r1.pdf",
+      "sha256": "54aa50d0f1cab4e37bc639fd58f71bb7b8b622c57e8ec220ca0d827ed22bd2fd",
+      "etag": "11fbfe-65ecb0c6924ba",
+      "last_modified": "Tue, 27 Oct 2026 04:40:39 GMT",
+      "size": 1178622
+    }
+  ]
+}

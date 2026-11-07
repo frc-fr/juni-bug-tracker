@@ -1,0 +1,1328 @@
+{
+  "releases": [
+    {
+      "system": "evo",
+      "version": "22.1R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-1R1-S2-EVO-SRN",
+      "lastmod": "2022-08-24T20:26:11.000Z",
+      "rendered": "2022-08-24T20:26:11.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-1R2-S1-EVO-SRN",
+      "created": "2022-10-07",
+      "lastmod": "2022-10-07T17:36:30.000Z",
+      "rendered": "2022-10-07T17:36:30.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S1-EVO-SRN",
+      "lastmod": "2023-01-20T23:40:16.000Z",
+      "rendered": "2023-01-20T23:40:16.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S2-EVO-SRN",
+      "lastmod": "2023-03-29T18:28:33.000Z",
+      "rendered": "2023-03-29T18:28:33.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S3-EVO-SRN",
+      "created": "2023-06-15",
+      "lastmod": "2023-06-15T16:42:01.000Z",
+      "rendered": "2023-06-15T16:42:01.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S4-EVO-SRN",
+      "created": "2023-10-19",
+      "lastmod": "2023-10-19T21:20:41.000Z",
+      "rendered": "2023-10-19T21:20:41.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.1R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S5-EVO-SRN",
+      "created": "2024-01-26",
+      "lastmod": "2024-01-26T22:22:36.000Z",
+      "rendered": "2024-01-26T22:22:36.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-2R1-S1-EVO-SRN",
+      "created": "2022-09-30",
+      "lastmod": "2022-09-30T20:54:57.000Z",
+      "rendered": "2022-09-30T20:54:57.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-2R2-S1-EVO-SRN",
+      "created": "2023-01-05",
+      "lastmod": "2023-01-05T16:33:30.000Z",
+      "rendered": "2023-01-05T16:33:30.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-2R2-S2-EVO-SRN",
+      "lastmod": "2023-02-13T16:41:06.000Z",
+      "rendered": "2023-02-13T16:41:06.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S1-EVO-SRN",
+      "created": "2023-06-21",
+      "lastmod": "2023-06-21T05:27:05.000Z",
+      "rendered": "2023-06-21T05:27:05.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S2-EVO-SRN",
+      "lastmod": "2023-09-08T00:34:18.000Z",
+      "rendered": "2023-09-08T00:34:18.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S3-EVO-SRN",
+      "lastmod": "2024-03-15T20:57:06.000Z",
+      "rendered": "2024-03-15T20:57:06.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S4-EVO-SRN",
+      "lastmod": "2024-07-03T21:22:49.000Z",
+      "rendered": "2024-07-03T21:22:49.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S5-EVO-SRN",
+      "lastmod": "2024-10-25T17:46:46.000Z",
+      "rendered": "2024-10-25T17:46:46.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S6",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S6-EVO-SRN",
+      "created": "2025-03-07",
+      "lastmod": "2025-03-07T04:51:42.000Z",
+      "rendered": "2025-03-07T04:51:42.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.2R3-S7",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S7-EVO-SRN",
+      "created": "2025-07-07",
+      "lastmod": "2025-07-07T16:10:08.000Z",
+      "rendered": "2025-07-07T16:10:08.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R1-S1-EVO-SRN",
+      "created": "2023-01-04",
+      "lastmod": "2023-01-04T17:21:44.000Z",
+      "rendered": "2023-01-04T17:21:44.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R1-S2-EVO-SRN",
+      "lastmod": "2023-02-03T22:13:52.000Z",
+      "rendered": "2023-02-03T22:13:52.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R2-S1-EVO-SRN",
+      "created": "2023-05-08",
+      "lastmod": "2023-05-08T22:37:30.000Z",
+      "rendered": "2023-05-08T22:37:30.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R2-S2-EVO-SRN",
+      "created": "2023-09-06",
+      "lastmod": "2023-09-06T15:25:25.000Z",
+      "rendered": "2023-09-06T15:25:25.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S1-EVO-SRN",
+      "rendered": "unknown",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "evo",
+      "version": "22.3R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S2-EVO-SRN",
+      "created": "2024-01-18",
+      "lastmod": "2024-01-18T20:30:28.000Z",
+      "rendered": "2024-01-18T20:30:28.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-4R1-S1-EVO-SRN",
+      "lastmod": "2023-02-27T21:51:51.000Z",
+      "rendered": "2023-02-27T21:51:51.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-4R1-S2-EVO-SRN",
+      "created": "2023-04-19",
+      "lastmod": "2023-04-19T19:18:01.000Z",
+      "rendered": "2023-04-19T19:18:01.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-4R2-S1-EVO-SRN",
+      "lastmod": "2023-08-25T17:20:42.000Z",
+      "rendered": "2023-08-25T17:20:42.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-4R2-S2-EVO-SRN",
+      "created": "2023-10-04",
+      "lastmod": "2024-02-06T01:08:35.000Z",
+      "rendered": "2024-02-06T01:08:35.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S1-EVO-SRN",
+      "created": "2024-04-25",
+      "lastmod": "2024-04-25T21:23:17.000Z",
+      "rendered": "2024-04-25T21:23:17.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S2-EVO-SRN",
+      "created": "2024-06-13",
+      "lastmod": "2024-06-13T19:04:11.000Z",
+      "rendered": "2024-06-13T19:04:11.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S3-EVO-SRN",
+      "lastmod": "2024-07-17T03:31:04.000Z",
+      "rendered": "2024-07-17T03:31:04.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S4-EVO-SRN",
+      "created": "2024-09-18",
+      "lastmod": "2024-09-18T17:38:05.000Z",
+      "rendered": "2024-09-18T17:38:05.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S5-EVO-SRN",
+      "created": "2024-11-07",
+      "lastmod": "2024-11-07T18:53:14.000Z",
+      "rendered": "2024-11-07T18:53:14.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S6",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S6-EVO-SRN",
+      "created": "2025-01-14",
+      "lastmod": "2025-01-14T16:20:40.000Z",
+      "rendered": "2025-01-14T16:20:40.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S7",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S7-EVO-SRN",
+      "created": "2025-05-19",
+      "lastmod": "2025-05-19T17:20:00.000Z",
+      "rendered": "2025-05-19T17:20:00.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "22.4R3-S9",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S9-EVO-SRN",
+      "lastmod": "2026-02-05T01:45:33.000Z",
+      "rendered": "2026-02-05T01:45:33.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-2R1-S1-EVO-SRN",
+      "created": "2023-09-15",
+      "lastmod": "2023-09-21T08:11:00.000Z",
+      "rendered": "2023-09-21T08:11:00.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-2R1-S2-EVO-SRN",
+      "created": "2023-11-29",
+      "lastmod": "2023-11-29T22:02:45.000Z",
+      "rendered": "2023-11-29T22:02:45.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S1-EVO-SRN",
+      "created": "2024-06-18",
+      "lastmod": "2024-06-18T06:00:01.000Z",
+      "rendered": "2024-06-18T06:00:01.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S2-EVO-SRN",
+      "created": "2024-09-10",
+      "lastmod": "2024-09-10T04:04:09.000Z",
+      "rendered": "2024-09-10T04:04:09.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S3-EVO-SRN",
+      "created": "2025-01-30",
+      "lastmod": "2025-01-30T15:50:15.000Z",
+      "rendered": "2025-01-30T15:50:15.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S5",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S5-EVO-SRN",
+      "created": "2025-10-30",
+      "lastmod": "2025-10-30T21:50:02.000Z",
+      "rendered": "2025-10-30T21:50:02.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S6",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S6-EVO-SRN",
+      "created": "2026-01-16",
+      "lastmod": "2026-01-16T23:33:04.000Z",
+      "rendered": "2026-01-16T23:33:04.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.2R2-S7",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S7-EVO-SRN",
+      "created": "2026-05-27",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-4R1-S2-EVO-SRN",
+      "lastmod": "2024-06-25T06:07:27.000Z",
+      "rendered": "2024-06-25T06:07:27.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S1-EVO-SRN",
+      "lastmod": "2024-08-19T16:01:32.000Z",
+      "rendered": "2024-08-19T16:01:32.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S2-EVO-SRN",
+      "lastmod": "2025-02-03T18:09:44.000Z",
+      "rendered": "2025-02-03T18:09:44.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S3-EVO-SRN",
+      "created": "2024-11-25",
+      "lastmod": "2025-02-03T18:09:44.000Z",
+      "rendered": "2025-02-03T18:09:44.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S4-EVO-SRN",
+      "created": "2025-03-04",
+      "lastmod": "2025-03-04T15:52:42.000Z",
+      "rendered": "2025-03-04T15:52:42.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S6",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S6-EVO-SRN",
+      "created": "2025-11-19",
+      "lastmod": "2025-11-19T22:57:43.000Z",
+      "rendered": "2025-11-19T22:57:43.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S7",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S7-EVO-SRN",
+      "lastmod": "2026-01-26T02:56:29.000Z",
+      "rendered": "2026-01-26T02:56:29.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "23.4R2-S8",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S8-EVO-SRN",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-2R1-S2-EVO-SRN",
+      "lastmod": "2024-12-17T21:33:28.000Z",
+      "rendered": "2024-12-17T21:33:28.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S1-EVO-SRN",
+      "lastmod": "2025-06-11T21:18:15.000Z",
+      "rendered": "2025-06-11T21:18:15.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S2-EVO-SRN",
+      "created": "2025-07-31",
+      "lastmod": "2025-08-14T21:58:56.000Z",
+      "rendered": "2025-08-14T21:58:56.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S3-EVO-SRN",
+      "lastmod": "2025-10-31T23:42:54.000Z",
+      "rendered": "2025-10-31T23:42:54.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S4-EVO-SRN",
+      "created": "2026-02-17",
+      "lastmod": "2026-02-17T17:28:48.000Z",
+      "rendered": "2026-02-17T17:28:48.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.2R2-S5",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S5-EVO-SRN",
+      "created": "2026-05-13",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-4R1-S2-EVO-SRN",
+      "lastmod": "2025-04-04T16:38:29.000Z",
+      "rendered": "2025-04-04T16:38:29.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R1-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-4R1-S3-EVO-SRN",
+      "lastmod": "2025-06-27T16:18:49.000Z",
+      "rendered": "2025-06-27T16:18:49.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S1-EVO-SRN",
+      "created": "2025-09-29",
+      "lastmod": "2025-09-29T22:02:06.000Z",
+      "rendered": "2025-09-29T22:02:06.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S2-EVO-SRN",
+      "created": "2025-12-02",
+      "lastmod": "2025-12-02T01:17:17.000Z",
+      "rendered": "2025-12-02T01:17:17.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S3-EVO-SRN",
+      "created": "2026-02-10",
+      "lastmod": "2026-02-10T22:21:33.000Z",
+      "rendered": "2026-02-10T22:21:33.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S4-EVO-SRN",
+      "created": "2026-06-11",
+      "lastmod": "2026-07-31T22:17:27.000Z",
+      "rendered": "2026-07-31T22:17:27.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "24.4R2-S5",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S5-EVO-SRN",
+      "created": "2026-10-14",
+      "lastmod": "2026-10-14T14:16:12.000Z",
+      "rendered": "2026-10-14T14:16:12.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-2R1-S1-EVO-SRN",
+      "created": "2025-09-26",
+      "lastmod": "2025-09-26T22:07:40.000Z",
+      "rendered": "2025-09-26T22:07:40.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-2R1-S2-EVO-SRN",
+      "lastmod": "2026-01-13T14:50:19.000Z",
+      "rendered": "2026-01-13T14:50:19.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-2R2-S1-EVO-SRN",
+      "created": "2026-06-01",
+      "lastmod": "2026-06-01T20:43:57.000Z",
+      "rendered": "2026-06-01T20:43:57.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-2R2-S2-EVO-SRN",
+      "lastmod": "2026-10-15T21:01:38.000Z",
+      "rendered": "2026-10-15T21:01:38.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "evo",
+      "version": "25.4R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S1-EVO-SRN",
+      "lastmod": "2026-03-02T19:18:53.000Z",
+      "rendered": "2026-03-02T19:18:53.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S2-EVO-SRN",
+      "created": "2026-05-06",
+      "lastmod": "2026-05-06T19:58:50.000Z",
+      "rendered": "2026-05-06T19:58:50.000Z"
+    },
+    {
+      "system": "evo",
+      "version": "25.4R1-S3",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S3-EVO-SRN",
+      "created": "2026-10-15",
+      "lastmod": "2026-10-15T21:11:57.000Z",
+      "rendered": "2026-10-15T21:11:57.000Z",
+      "unread": "lists in an attachment"
+    },
+    {
+      "system": "evo",
+      "version": "26.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/26-2R1-S2-EVO-SRN",
+      "created": "2026-10-16",
+      "lastmod": "2026-10-16T23:48:15.000Z",
+      "rendered": "2026-10-16T23:48:15.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-1R1-S2-SRN",
+      "lastmod": "2022-09-21T18:01:38.000Z",
+      "rendered": "2022-09-21T18:01:38.000Z",
+      "unread": "holds the SRN of another release"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-1R2-S1-SRN",
+      "lastmod": "2022-10-04T15:32:02.000Z",
+      "rendered": "2022-10-04T15:32:02.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S1-SRN",
+      "created": "2023-02-13",
+      "lastmod": "2023-02-13T19:09:19.000Z",
+      "rendered": "2023-02-13T19:09:19.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S2-SRN",
+      "created": "2023-04-13",
+      "lastmod": "2023-04-13T17:38:27.000Z",
+      "rendered": "2023-04-13T17:38:27.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S3-SRN",
+      "created": "2023-06-09",
+      "lastmod": "2023-06-21T05:20:06.000Z",
+      "rendered": "2023-06-21T05:20:06.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S4-SRN",
+      "lastmod": "2024-02-01T14:59:03.000Z",
+      "rendered": "2024-02-01T14:59:03.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "junos",
+      "version": "22.1R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-1R3-S5-SRN",
+      "lastmod": "2024-01-26T22:02:53.000Z",
+      "rendered": "2024-01-26T22:02:53.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-2R1-S2-SRN",
+      "created": "2022-10-31",
+      "lastmod": "2022-11-15T17:42:52.000Z",
+      "rendered": "2022-11-15T17:42:52.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-2R2-S1-SRN",
+      "lastmod": "2023-01-05T17:23:44.000Z",
+      "rendered": "2023-01-05T17:23:44.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-2R2-S2-SRN",
+      "created": "2023-03-02",
+      "lastmod": "2023-03-14T17:01:58.000Z",
+      "rendered": "2023-03-14T17:01:58.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S1-SRN",
+      "created": "2023-06-15",
+      "lastmod": "2023-06-16T01:45:54.000Z",
+      "rendered": "2023-06-16T01:45:54.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S2-SRN",
+      "created": "2023-09-07",
+      "lastmod": "2023-09-07T17:48:06.000Z",
+      "rendered": "2023-09-07T17:48:06.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S3-SRN",
+      "lastmod": "2024-09-11T19:12:13.000Z",
+      "rendered": "2024-09-11T19:12:13.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S4-SRN",
+      "lastmod": "2024-07-03T21:16:34.000Z",
+      "rendered": "2024-07-03T21:16:34.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S5-SRN",
+      "lastmod": "2024-11-08T18:06:42.000Z",
+      "rendered": "2024-11-08T18:06:42.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S6",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S6-SRN",
+      "created": "2025-03-07",
+      "lastmod": "2025-08-18T17:45:54.000Z",
+      "rendered": "2025-08-18T17:45:54.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S7",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S7-SRN",
+      "lastmod": "2025-06-24T15:18:04.000Z",
+      "rendered": "2025-06-24T15:18:04.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.2R3-S8",
+      "article": "https://supportportal.juniper.net/s/article/22-2R3-S8-SRN",
+      "created": "2026-10-14",
+      "lastmod": "2026-10-16T20:13:45.000Z",
+      "rendered": "2026-10-16T20:13:45.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R1-S1-SRN",
+      "lastmod": "2023-01-04T17:15:39.000Z",
+      "rendered": "2023-01-04T17:15:39.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R1-S2-SRN",
+      "lastmod": "2023-02-03T22:08:20.000Z",
+      "rendered": "2023-02-03T22:08:20.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R2-S1-SRN",
+      "created": "2023-05-12",
+      "lastmod": "2023-05-17T15:39:53.000Z",
+      "rendered": "2023-05-17T15:39:53.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R2-S2-SRN",
+      "created": "2023-09-06",
+      "lastmod": "2023-09-06T20:45:46.000Z",
+      "rendered": "2023-09-06T20:45:46.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S1-SRN",
+      "lastmod": "2023-10-04T05:57:00.000Z",
+      "rendered": "2023-10-04T05:57:00.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S2-SRN",
+      "lastmod": "2024-06-25T18:19:33.000Z",
+      "rendered": "2024-06-25T18:19:33.000Z",
+      "unread": "lists in an attachment"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S3-SRN",
+      "created": "2024-06-03",
+      "lastmod": "2024-07-20T05:43:57.000Z",
+      "rendered": "2024-07-20T05:43:57.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S4-SRN",
+      "created": "2024-11-25",
+      "lastmod": "2024-11-25T18:33:01.000Z",
+      "rendered": "2024-11-25T18:33:01.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.3R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-3R3-S5-SRN",
+      "lastmod": "2026-10-16T20:12:58.000Z",
+      "rendered": "2026-10-16T20:12:58.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-4R1-S1-SRN",
+      "lastmod": "2023-02-13T16:49:15.000Z",
+      "rendered": "2023-02-13T16:49:15.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-4R1-S2-SRN",
+      "lastmod": "2023-04-05T20:27:58.000Z",
+      "rendered": "2023-04-05T20:27:58.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/22-4R2-S1-SRN",
+      "lastmod": "2023-07-28T18:36:32.000Z",
+      "rendered": "2023-07-28T18:36:32.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/22-4R2-S2-SRN",
+      "created": "2023-10-14",
+      "lastmod": "2024-02-06T00:37:44.000Z",
+      "rendered": "2024-02-06T00:37:44.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S3",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S3-SRN",
+      "created": "2024-07-19",
+      "lastmod": "2024-07-19T03:40:33.000Z",
+      "rendered": "2024-07-19T03:40:33.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S4",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S4-SRN",
+      "lastmod": "2024-09-12T20:45:22.000Z",
+      "rendered": "2024-09-12T20:45:22.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S5",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S5-SRN",
+      "lastmod": "2024-11-08T17:36:43.000Z",
+      "rendered": "2024-11-08T17:36:43.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S6",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S6-SRN",
+      "created": "2025-01-23",
+      "lastmod": "2025-01-23T23:26:54.000Z",
+      "rendered": "2025-01-23T23:26:54.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S7",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S7-SRN",
+      "lastmod": "2025-05-28T15:06:16.000Z",
+      "rendered": "2025-05-28T15:06:16.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S8",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S8-SRN",
+      "created": "2025-12-01",
+      "lastmod": "2026-02-10T19:59:06.000Z",
+      "rendered": "2026-02-10T19:59:06.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "22.4R3-S9",
+      "article": "https://supportportal.juniper.net/s/article/22-4R3-S9-SRN",
+      "created": "2026-01-16",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-2R1-S1-SRN",
+      "created": "2023-09-15",
+      "lastmod": "2023-09-15T15:41:47.000Z",
+      "rendered": "2023-09-15T15:41:47.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-2R1-S2-SRN",
+      "created": "2024-01-02",
+      "lastmod": "2024-01-02T22:45:51.000Z",
+      "rendered": "2024-01-02T22:45:51.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S1-SRN",
+      "lastmod": "2024-07-20T05:43:57.000Z",
+      "rendered": "2024-07-20T05:43:57.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S2-SRN",
+      "lastmod": "2024-09-18T17:38:06.000Z",
+      "rendered": "2024-09-18T17:38:06.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S3-SRN",
+      "lastmod": "2025-09-04T14:15:48.000Z",
+      "rendered": "2025-09-04T14:15:48.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S4-SRN",
+      "lastmod": "2025-09-11T01:30:37.000Z",
+      "rendered": "2025-09-11T01:30:37.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S6",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S6-SRN",
+      "created": "2026-01-16",
+      "lastmod": "2026-01-16T23:28:51.000Z",
+      "rendered": "2026-01-16T23:28:51.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.2R2-S7",
+      "article": "https://supportportal.juniper.net/s/article/23-2R2-S7-SRN",
+      "created": "2026-05-27",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S1-SRN",
+      "created": "2024-08-19",
+      "lastmod": "2024-08-19T18:06:37.000Z",
+      "rendered": "2024-08-19T18:06:37.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S2-SRN",
+      "created": "2024-08-30",
+      "lastmod": "2024-09-25T15:02:18.000Z",
+      "rendered": "2024-09-25T15:02:18.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S3-SRN",
+      "created": "2024-11-25",
+      "lastmod": "2025-02-28T06:48:37.000Z",
+      "rendered": "2025-02-28T06:48:37.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S4-SRN",
+      "created": "2025-03-20",
+      "lastmod": "2025-03-20T22:24:53.000Z",
+      "rendered": "2025-03-20T22:24:53.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S7",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S7-SRN",
+      "created": "2026-01-16",
+      "lastmod": "2026-04-08T23:31:11.000Z",
+      "rendered": "2026-04-08T23:31:11.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "23.4R2-S8",
+      "article": "https://supportportal.juniper.net/s/article/23-4R2-S8-SRN",
+      "created": "2026-06-10",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/24-2R1-S1-SRN",
+      "lastmod": "2024-10-03T23:06:51.000Z",
+      "rendered": "2024-10-03T23:06:51.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-2R1-S2-SRN",
+      "lastmod": "2025-01-08T23:40:57.000Z",
+      "rendered": "2025-01-08T23:40:57.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S1-SRN",
+      "created": "2025-05-23",
+      "lastmod": "2025-05-23T20:39:28.000Z",
+      "rendered": "2025-05-23T20:39:28.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S2-SRN",
+      "created": "2025-07-28",
+      "lastmod": "2025-08-15T15:38:17.000Z",
+      "rendered": "2025-08-15T15:38:17.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S3-SRN",
+      "lastmod": "2025-10-31T21:17:40.000Z",
+      "rendered": "2025-10-31T21:17:40.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S4-SRN",
+      "lastmod": "2026-02-24T00:57:34.000Z",
+      "rendered": "2026-02-24T00:57:34.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.2R2-S5",
+      "article": "https://supportportal.juniper.net/s/article/24-2R2-S5-SRN",
+      "lastmod": "2026-10-14T14:16:00.000Z",
+      "rendered": "2026-10-14T14:16:00.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/24-4R1-S2-SRN",
+      "lastmod": "2025-03-26T03:03:58.000Z",
+      "rendered": "2025-03-26T03:03:58.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R1-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-4R1-S3-SRN",
+      "created": "2025-06-17",
+      "lastmod": "2026-04-08T23:55:48.000Z",
+      "rendered": "2026-04-08T23:55:48.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R2-S3",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S3-SRN",
+      "created": "2026-02-12",
+      "lastmod": "2026-02-13T08:20:51.000Z",
+      "rendered": "2026-02-13T08:20:51.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R2-S4",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S4-SRN",
+      "created": "2026-06-11",
+      "lastmod": "2026-06-25T06:26:09.000Z",
+      "rendered": "2026-06-25T06:26:09.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "24.4R2-S5",
+      "article": "https://supportportal.juniper.net/s/article/24-4R2-S5-SRN",
+      "created": "2026-10-14",
+      "lastmod": "2026-11-03T22:33:57.000Z",
+      "rendered": "2026-11-03T22:33:57.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-2R1-S1-SRN",
+      "created": "2025-11-06",
+      "lastmod": "2025-11-06T19:15:05.000Z",
+      "rendered": "2025-11-06T19:15:05.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-2R1-S2-SRN",
+      "created": "2026-01-10",
+      "lastmod": "2026-01-10T01:30:01.000Z",
+      "rendered": "2026-01-10T01:30:01.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R2-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-2R2-S1-SRN",
+      "lastmod": "2026-06-01T20:40:44.000Z",
+      "rendered": "2026-06-01T20:40:44.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.2R2-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-2R2-S2-SRN",
+      "lastmod": "2026-10-15T20:50:01.000Z",
+      "rendered": "2026-10-15T20:50:01.000Z",
+      "unread": "empty for visitors"
+    },
+    {
+      "system": "junos",
+      "version": "25.4R1-S1",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S1-SRN",
+      "created": "2026-03-02",
+      "lastmod": "2026-03-02T19:16:51.000Z",
+      "rendered": "2026-03-02T19:16:51.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.4R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S2-SRN",
+      "created": "2026-05-06",
+      "lastmod": "2026-06-24T22:51:54.000Z",
+      "rendered": "2026-06-24T22:51:54.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "25.4R1-S3",
+      "article": "https://supportportal.juniper.net/s/article/25-4R1-S3-SRN",
+      "created": "2026-10-21",
+      "lastmod": "2026-10-21T23:13:18.000Z",
+      "rendered": "2026-10-21T23:13:18.000Z"
+    },
+    {
+      "system": "junos",
+      "version": "26.2R1-S2",
+      "article": "https://supportportal.juniper.net/s/article/26-2R1-S2-SRN",
+      "created": "2026-10-16",
+      "lastmod": "2026-10-16T23:42:45.000Z",
+      "rendered": "2026-10-16T23:42:45.000Z"
+    }
+  ],
+  "missing": {
+    "evo-22.1R1": [
+      1,
+      3,
+      4
+    ],
+    "evo-22.1R2": [
+      2,
+      3
+    ],
+    "evo-22.1R3": [
+      6,
+      7
+    ],
+    "evo-22.2R1": [
+      2,
+      3
+    ],
+    "evo-22.2R2": [
+      3,
+      4
+    ],
+    "evo-22.2R3": [
+      8,
+      9
+    ],
+    "evo-22.3R1": [
+      3,
+      4
+    ],
+    "evo-22.3R2": [
+      3,
+      4
+    ],
+    "evo-22.3R3": [
+      3,
+      4
+    ],
+    "evo-22.4R1": [
+      3,
+      4
+    ],
+    "evo-22.4R2": [
+      3,
+      4
+    ],
+    "evo-22.4R3": [
+      8,
+      10,
+      11
+    ],
+    "evo-23.1R1": [
+      1,
+      2
+    ],
+    "evo-23.2R1": [
+      3,
+      4
+    ],
+    "evo-23.2R2": [
+      4,
+      8,
+      9
+    ],
+    "evo-23.4R1": [
+      1,
+      3,
+      4
+    ],
+    "evo-23.4R2": [
+      5,
+      9,
+      10
+    ],
+    "evo-24.2R1": [
+      1,
+      3,
+      4
+    ],
+    "evo-24.2R2": [
+      6,
+      7
+    ],
+    "evo-24.4R1": [
+      1,
+      4,
+      5
+    ],
+    "evo-24.4R2": [
+      6,
+      7
+    ],
+    "evo-25.2R1": [
+      3,
+      4
+    ],
+    "evo-25.2R2": [
+      3,
+      4
+    ],
+    "evo-25.4R1": [
+      4,
+      5
+    ],
+    "evo-26.2R1": [
+      1,
+      3,
+      4
+    ],
+    "junos-22.1R1": [
+      1,
+      3,
+      4
+    ],
+    "junos-22.1R2": [
+      2,
+      3
+    ],
+    "junos-22.1R3": [
+      6,
+      7
+    ],
+    "junos-22.2R1": [
+      1,
+      3,
+      4
+    ],
+    "junos-22.2R2": [
+      3,
+      4
+    ],
+    "junos-22.2R3": [
+      9,
+      10
+    ],
+    "junos-22.3R1": [
+      3,
+      4
+    ],
+    "junos-22.3R2": [
+      3,
+      4
+    ],
+    "junos-22.3R3": [
+      6,
+      7
+    ],
+    "junos-22.4R1": [
+      3,
+      4
+    ],
+    "junos-22.4R2": [
+      3,
+      4
+    ],
+    "junos-22.4R3": [
+      1,
+      2,
+      10,
+      11
+    ],
+    "junos-23.1R1": [
+      1,
+      2
+    ],
+    "junos-23.2R1": [
+      3,
+      4
+    ],
+    "junos-23.2R2": [
+      5,
+      8,
+      9
+    ],
+    "junos-23.4R1": [
+      1,
+      2
+    ],
+    "junos-23.4R2": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "junos-24.2R1": [
+      3,
+      4
+    ],
+    "junos-24.2R2": [
+      6,
+      7
+    ],
+    "junos-24.4R1": [
+      1,
+      4,
+      5
+    ],
+    "junos-24.4R2": [
+      1,
+      2,
+      6,
+      7
+    ],
+    "junos-25.2R1": [
+      3,
+      4
+    ],
+    "junos-25.2R2": [
+      3,
+      4
+    ],
+    "junos-25.4R1": [
+      4,
+      5
+    ],
+    "junos-26.2R1": [
+      1,
+      3,
+      4
+    ]
+  }
+}
