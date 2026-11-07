@@ -55,9 +55,12 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
 
 ## Mise à jour
 
-Le workflow GitHub Actions ne se lance pour l'instant qu'à la main (`workflow_dispatch`). Il collecte,
-extrait, contrôle, puis publie le site sur GitHub Pages. Si un contrôle échoue, le site garde ses
-dernières données valides.
+Un traitement GitHub Actions s'exécute du lundi au vendredi à 9 h 15, 14 h 15 et 19 h 00, heure de
+Paris, et sur lancement manuel. Il collecte, extrait, contrôle, puis publie le site sur GitHub Pages. Si
+un contrôle échoue, le site garde ses dernières données valides.
+
+À chaque passage, les PDF déjà connus ne sont vérifiés que par une requête HEAD, et seuls les articles
+SRN nouveaux ou modifiés depuis le dernier passage sont affichés et relus.
 
 ## Développement
 

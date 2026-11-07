@@ -72,7 +72,7 @@ def build_feed(changes: List[dict], descriptions: Dict[str, str], base_url: str)
         element.text = text
         return element
 
-    add(feed, "title", "Junos Bug Tracker: what's new")
+    add(feed, "title", "JunOS Bug Tracker: what's new")
     add(feed, "subtitle", "New Junos OS and Junos OS Evolved releases and issues added to published Release Notes")
     add(feed, "id", ID_PREFIX)
     add(feed, "link", href=base_url)
