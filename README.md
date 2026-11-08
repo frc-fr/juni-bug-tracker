@@ -3,7 +3,7 @@
 Site statique de suivi des bugs (PR) de Junos OS et de Junos OS Evolved et de leurs corrections,
 construit à partir des Release Notes publiques de Juniper Networks.
 
-Ce projet est indépendant. Il n'est ni affilié à Juniper Networks ni à HPE, ni approuvé par eux.
+Ce projet est indépendant. Il n'est affilié ni à Juniper Networks ni à HPE.
 Les informations sont fournies à titre indicatif : vérifiez toujours la documentation officielle.
 
 ## Fonctionnalités

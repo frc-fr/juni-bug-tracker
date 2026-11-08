@@ -18,7 +18,9 @@ def plural(count: int, singular: str, several: str) -> str:
 
 
 def titles_of(change: dict, documents: Dict[str, dict]) -> Dict[str, str]:
-    name = f"{SYSTEMS[change['system']]} {change['version']}"
+    # Juniper writes the Evolved releases with -EVO: the reader must not mistake one system for the other.
+    suffix = "-EVO" if change["system"] == "evo" else ""
+    name = f"{SYSTEMS[change['system']]} {change['version']}{suffix}"
     count = len(change["bugs"])
     if change["kind"] == "known_added":
         return {

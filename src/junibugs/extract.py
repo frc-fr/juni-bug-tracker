@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 from .parser import Document, parse_pdf
-from .srn import parse_article
+from .srn import parse_article, parse_srn_pdf
 from .versions import branch_of, split_key, version_key
 
 log = logging.getLogger(__name__)
@@ -104,24 +104,35 @@ def extract_all(cache: Path, output: Path, changes_path: Path, date: Optional[st
     return problems
 
 
-def extract_srn(cache: Path, output: Path) -> Dict[str, List[str]]:
-    """Read the rendered SRN articles into data/extracted/srn/<system>-<version>.json."""
+def read_srn(path: Path):
+    if path.suffix == ".pdf":
+        return parse_srn_pdf(path)
+    return parse_article(path.read_text(encoding="utf-8"))
+
+
+def extract_srn(cache: Path, output: Path, attachments: Path = Path(".cache/srn-attachments")) -> Dict[str, List[str]]:
+    """Read the rendered SRN articles, then the PDF copies added by hand, into data/extracted/srn/.
+
+    A PDF copy is read after the article of the same release, so it replaces an article
+    shown empty to visitors. Without the files, the committed results stay as they are.
+    """
     output.mkdir(parents=True, exist_ok=True)
     problems = {}
-    for page in sorted(cache.glob("*.md")):
+    for page in sorted(cache.glob("*.md")) + sorted(attachments.glob("*.pdf")):
         try:
-            notice = parse_article(page.read_text(encoding="utf-8"))
+            notice = read_srn(page)
         except ValueError as error:
             # An article whose lists are attached is known, only its fixes are missing.
             if "attachment" not in str(error):
                 problems[page.stem] = [str(error)]
             continue
         key = f"{notice.system}-{notice.version}"
-        if key != page.stem:
+        if page.suffix == ".md" and key != page.stem:
             # Juniper published the text of another release under this address: not trusted.
             log.warning("%s: the article holds the SRN of %s, left out", page.stem, key)
             continue
-        head = {"system": notice.system, "version": notice.version, "created": notice.created, "skipped": notice.skipped}
+        head = {"system": notice.system, "version": notice.version, "created": notice.created, "skipped": notice.skipped,
+                "source": "pdf" if page.suffix == ".pdf" else "article"}
         lines = ",\n".join("  " + json.dumps(item, ensure_ascii=False) for item in notice.items)
         body = json.dumps(head, ensure_ascii=False)[:-1]
         (output / f"{key}.json").write_text(f'{body}, "items": [\n{lines}\n]}}\n', encoding="utf-8")

@@ -276,11 +276,11 @@ function highlight(text, terms) {
 
 /** "23.4R2-S10 (pas encore publiée)": a release named by an SRN without article of its own. */
 function releaseLabel(entry) {
-  return entry.publication ? `${entry.v} (${t(`publication.${entry.publication}`)})` : entry.v;
+  return entry.publication ? `${nameOf(entry)} (${t(`publication.${entry.publication}`)})` : nameOf(entry);
 }
 
 function fixesLabel(bug) {
-  const labels = bug.fixes.map((version) => releaseLabel(versions.find((entry) => entry.v === version)));
+  const labels = bug.fixes.map((version) => releaseLabel(versions[version]));
   return labels.length ? t("bug.fixedIn", { versions: labels.join(", ") }) : t("bug.noFix");
 }
 
@@ -301,7 +301,7 @@ function renderAppearance(bug) {
   }
   if (!first.size) return `<p>${t("bug.neverKnown")}</p>`;
   const lines = [...first].reverse().map(([branch, [version, status]]) => {
-    const text = t(status === "l" ? "bug.firstLimitation" : "bug.firstKnown", { version: versions[version].v });
+    const text = t(status === "l" ? "bug.firstLimitation" : "bug.firstKnown", { version: nameOf(versions[version]) });
     return `<dt>${escapeHtml(branch)}</dt><dd>${escapeHtml(text)}</dd>`;
   });
   return `<dl class="history">${lines.join("")}</dl><p class="note">${t("bug.appearanceNote")}</p>`;
@@ -310,12 +310,13 @@ function renderAppearance(bug) {
 function renderHistory(bug) {
   const lines = [...bug.events].reverse().map(([version, status, page, familyList, release, source]) => {
     const entry = versions[version];
-    const parts = [release ? `${KNOWN_LABELS[status]} (${escapeHtml(release)})` : KNOWN_LABELS[status]];
+    const named = release && system === "evo" ? `${release}-EVO` : release;
+    const parts = [release ? `${KNOWN_LABELS[status]} (${escapeHtml(named)})` : KNOWN_LABELS[status]];
     if (familyList.length) parts.push(escapeHtml(familyList.map((position) => families[position]).join(", ")));
     if (source) {
       // Stated by the SRN of another release, in its "Resolved In" field.
       const origin = sources[source];
-      const via = `<a href="${escapeHtml(origin.article)}" target="_blank" rel="noopener">${t("bug.via", { version: escapeHtml(origin.version) })}</a>`;
+      const via = `<a href="${escapeHtml(origin.article)}" target="_blank" rel="noopener">${t("bug.via", { version: escapeHtml(origin.system === "evo" ? `${origin.version}-EVO` : origin.version) })}</a>`;
       parts.push(entry.article ? `${officialLink(entry, null, t("bug.srnArticle"))}, ${via}` : via);
     } else if (entry.service) {
       parts.push(officialLink(entry, null, t("bug.srnArticle")));
@@ -339,9 +340,9 @@ function supportTag(bug) {
 }
 
 function renderChange({ family, category, text, page, entry }, terms) {
-  const link = officialLink(entry, page, t("change.page", { version: escapeHtml(entry.v), page }));
+  const link = officialLink(entry, page, t("change.page", { version: escapeHtml(nameOf(entry)), page }));
   return `<div class="bug"><div class="bug-row">
-    <span class="bug-id">${escapeHtml(entry.v)}</span>
+    <span class="bug-id">${escapeHtml(nameOf(entry))}</span>
     <span class="bug-text">${highlight(text, terms)}</span>
     <span class="bug-meta"><span class="badge change">${t("change.label")}</span><span>${escapeHtml(families[family])}</span>${category ? `<span>${escapeHtml(category)}</span>` : ""}${link}</span>
   </div></div>`;
@@ -398,21 +399,21 @@ function renderNotices() {
   const messages = [];
   const selected = [versionIndex(state.version), state.view === "upgrade" ? versionIndex(state.from) : -1];
   for (const index of selected) {
-    if (index >= 0 && versions[index].unavailable) messages.push(t("notice.unavailable", { version: versions[index].v }));
+    if (index >= 0 && versions[index].unavailable) messages.push(t("notice.unavailable", { version: nameOf(versions[index]) }));
     const selected = index >= 0 ? versions[index] : null;
-    if (selected && selected.publication) messages.push(t(`notice.${selected.publication}`, { version: selected.v }));
-    else if (selected && selected.service && !selected.read) messages.push(t("notice.srnNotRead", { version: selected.v }));
+    if (selected && selected.publication) messages.push(t(`notice.${selected.publication}`, { version: nameOf(selected) }));
+    else if (selected && selected.service && !selected.read) messages.push(t(`notice.unread.${selected.unread || "pending"}`, { version: nameOf(selected) }));
   }
   const version = selected[0];
   const family = selectedFamily(state.model, families);
   if (version >= 0 && family >= 0 && !versions[version].unavailable && !versions[version].service && !versions[version].families.includes(family)) {
-    messages.push(t("notice.notListed", { family: families[family], version: versions[version].v }));
+    messages.push(t("notice.notListed", { family: families[family], version: nameOf(versions[version]) }));
   }
   if (state.view === "upgrade" && versionIndex(state.from) >= 0 && version >= 0 && versionIndex(state.from) >= version) {
     messages.push(t("notice.order"));
   }
   if (state.view === "upgrade" && versionIndex(state.from) >= 0 && version >= 0 && versionIndex(state.from) < version) {
-    messages.push(t("notice.path", { path: upgradePath(versions, versionIndex(state.from), version).map((index) => versions[index].v).join(", ") }));
+    messages.push(t("notice.path", { path: upgradePath(versions, versionIndex(state.from), version).filter((index) => !versions[index].service).map((index) => nameOf(versions[index])).join(", ") }));
   }
   $("notices").innerHTML = messages.map((text) => `<p class="notice">${escapeHtml(text)}</p>`).join("");
 }
@@ -438,7 +439,7 @@ function renderSupport() {
     params.set("version", entry.v);
     const date = entry.support.support ? `<small>${t("support.date", { date: formatDate(entry.support.support) })}</small>` : "";
     const current = entry.v === state.version ? ' aria-current="true"' : "";
-    return `<a class="support-branch" href="#${escapeHtml(params.toString())}"${current}><strong>${escapeHtml(entry.v)}</strong>${date}</a>`;
+    return `<a class="support-branch" href="#${escapeHtml(params.toString())}"${current}><strong>${escapeHtml(nameOf(entry))}</strong>${date}</a>`;
   });
   const note = t(lifecycle.shared ? "support.noteEvo" : "support.note", { url: escapeHtml(lifecycle.source) });
   $("support").innerHTML = `<h2>${t("support.title")}</h2><div class="support-list">${links.join("")}</div><p class="muted">${note}</p>`;
@@ -453,7 +454,7 @@ function renderVersionInfo() {
     if (support) parts.push(support);
     if (entry.article) parts.push(officialLink(entry, null, t("version.article")));
   } else if (entry && !entry.unavailable) {
-    parts.push(`${systemName} ${escapeHtml(entry.v)}`);
+    parts.push(`${systemName} ${escapeHtml(nameOf(entry))}`);
     const page = entry.pages.revisions;
     if (entry.released) parts.push(officialLink(entry, page, t("version.released", { date: formatDate(entry.released) })));
     if (entry.revised) parts.push(officialLink(entry, page, t("version.revised", { date: formatDate(entry.revised) })));
@@ -479,7 +480,7 @@ function renderUpgradeNotices() {
     return `<li>${officialLink(entry, item.page, escapeHtml(item.title))}${where}</li>`;
   }).join("");
   $("upgrade-notices").innerHTML = `<details class="reading"${state.reading ? " open" : ""}><summary>${t("reading.title", { count: items.length })}</summary>
-    <p class="muted">${t("reading.help", { version: escapeHtml(entry.v) })}</p><ul>${list}</ul></details>`;
+    <p class="muted">${t("reading.help", { version: escapeHtml(nameOf(entry)) })}</p><ul>${list}</ul></details>`;
 }
 
 /** Releases holding the most recent value of a date field, newest release first. */
@@ -489,14 +490,14 @@ function latestBy(field) {
   return { date, entries: dated.filter((entry) => entry[field] === date).reverse() };
 }
 
-function newsCard(title, date, releases) {
-  const links = releases.map((release) => `<a href="#${escapeHtml(new URLSearchParams({ system, version: release }).toString())}">${escapeHtml(release)}</a>`);
+function newsCard(title, date, entries) {
+  const links = entries.map((entry) => `<a href="#${escapeHtml(new URLSearchParams({ system, version: entry.v }).toString())}">${escapeHtml(nameOf(entry))}</a>`);
   return `<section class="news-card"><h2>${title}</h2><strong>${date}</strong><p>${systemName} ${links.join(", ")}</p></section>`;
 }
 
 function latestCard(title, field) {
   const { date, entries } = latestBy(field);
-  return date ? newsCard(title, formatDate(date), entries.map((entry) => entry.v)) : "";
+  return date ? newsCard(title, formatDate(date), entries) : "";
 }
 
 function pdfLine(version) {
@@ -508,7 +509,7 @@ function pdfLine(version) {
 function bugTable(rows) {
   const header = ["copy.bug", "copy.status", "copy.category", "copy.description", "copy.workaround", "copy.fix"].map((key) => t(key));
   return [header, ...rows.map(({ bug, status, group, change }) => (change ? [
-    change.entry.v, UPGRADE_GROUPS[group].label, families[change.family], change.text, "", "",
+    nameOf(change.entry), UPGRADE_GROUPS[group].label, families[change.family], change.text, "", "",
   ] : [
     `PR${bug.id}`,
     group ? UPGRADE_GROUPS[group].label : status ? STATUSES[status.key] : "",
@@ -799,7 +800,10 @@ async function start() {
   );
   lifecycle = index.lifecycle;
   const today = new Date().toISOString().slice(0, 10);
-  versions = index.versions.map((entry) => ({ ...entry, ...releaseParts(entry.v), support: branchSupport(entry.branch, lifecycle.branches, today) }));
+  versions = index.versions.map((entry) => ({
+    ...entry, ...releaseParts(entry.v), name: system === "evo" ? `${entry.v}-EVO` : entry.v,
+    support: branchSupport(entry.branch, lifecycle.branches, today),
+  }));
   sources = index.sources;
   families = index.families;
   models = index.models;
@@ -823,8 +827,8 @@ async function start() {
   ]);
 
   const latest = [...versions].reverse().find(isPublished);
-  $("scope").textContent = t("page.scopeRange", { system: systemName, first: versions[0].v, last: latest.v });
-  $("stats").textContent = t("page.stats", { bugs: formatNumber(bugs.length), versions: formatNumber(versions.length), latest: latest.v });
+  $("scope").textContent = t("page.scopeRange", { system: systemName, first: nameOf(versions[0]), last: nameOf(latest) });
+  $("stats").textContent = t("page.stats", { bugs: formatNumber(bugs.length), versions: formatNumber(versions.length), latest: nameOf(latest) });
   const moment = new Date(updated);
   $("updated").textContent = t("page.updated", {
     date: moment.toLocaleDateString(locale),

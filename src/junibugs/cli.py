@@ -15,6 +15,7 @@ def main() -> None:
     parser.add_argument("--srn", type=Path, default=Path("sources/srn.json"))
     parser.add_argument("--cache", type=Path, default=Path(".cache/pdfs"))
     parser.add_argument("--srn-cache", type=Path, default=Path(".cache/srn"))
+    parser.add_argument("--srn-attachments", type=Path, default=Path(".cache/srn-attachments"))
     parser.add_argument("--output", type=Path, default=Path("data/extracted"))
     parser.add_argument("--changes", type=Path, default=Path("data/changes.json"))
     parser.add_argument("--site", type=Path, default=Path("site"))
@@ -39,7 +40,7 @@ def main() -> None:
         logging.info("%d releases, %d PDFs downloaded", len(manifest), len(downloaded))
     elif args.command == "extract":
         problems = extract.extract_all(args.cache, args.output, args.changes)
-        problems.update(extract.extract_srn(args.srn_cache, args.output / "srn"))
+        problems.update(extract.extract_srn(args.srn_cache, args.output / "srn", args.srn_attachments))
         for key, warnings in problems.items():
             for warning in warnings:
                 logging.error("%s: %s", key, warning)

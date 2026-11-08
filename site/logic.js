@@ -1,6 +1,11 @@
 "use strict";
 // What the site concludes from the notes, kept apart from the page so it can be tested.
 
+/** The release as Juniper writes it: Junos OS Evolved releases end with -EVO, as 24.4R2-S5-EVO. */
+function nameOf(entry) {
+  return entry.name || entry.v;
+}
+
 /** Train, R number and service number of a release: 22.2R3-S7 is train 22.2R3, R 3, S 7. */
 function releaseParts(version) {
   const match = version.match(/^(\d+\.\d+)R(\d+)(?:-S(\d+))?$/);
@@ -25,27 +30,27 @@ function statusAt(bug, index, versions) {
   if (own.some(([v, status]) => v === index && status !== "r")) return { key: "affected" };
 
   const fixed = own.find(([v, status]) => status === "r" && covers(versions[v], target));
-  if (fixed) return { key: "fixed", detail: { id: "fixedSince", version: versions[fixed[0]].v } };
+  if (fixed) return { key: "fixed", detail: { id: "fixedSince", version: nameOf(versions[fixed[0]]) } };
 
   // Open in a release this one derives from, with no fix documented on the way.
   // Only for a service release: an R note that drops an open issue may have fixed it silently.
   const inherited = target.s > 0 && [...own].reverse().find(([v, status]) => status !== "r" && v !== index && covers(versions[v], target));
-  if (inherited) return { key: "potential", detail: { id: "openSince", version: versions[inherited[0]].v } };
+  if (inherited) return { key: "potential", detail: { id: "openSince", version: nameOf(versions[inherited[0]]) } };
 
   const fixedLater = own.find(([v, status]) => status === "r" && v > index);
-  if (fixedLater) return { key: "potential", detail: { id: "fixedIn", version: versions[fixedLater[0]].v } };
+  if (fixedLater) return { key: "potential", detail: { id: "fixedIn", version: nameOf(versions[fixedLater[0]]) } };
 
   const knownLater = own.find(([v]) => v > index);
-  if (knownLater) return { key: "potential", detail: { id: "knownIn", version: versions[knownLater[0]].v } };
+  if (knownLater) return { key: "potential", detail: { id: "knownIn", version: nameOf(versions[knownLater[0]]) } };
 
   if (own.length) {
     const last = own[own.length - 1][0];
-    return { key: "unknown", detail: { id: "dropped", version: versions[last].v } };
+    return { key: "unknown", detail: { id: "dropped", version: nameOf(versions[last]) } };
   }
   return { key: "unknown", detail: { id: "noMention" } };
 }
 
-/** The first fix of each train, newest first: "22.2R3-S7, 23.4R2". */
+/** The first fix of each train, newest first, as positions in the list of releases. */
 function firstFixes(events, versions) {
   const found = new Map();
   for (const [v, status] of events) {
@@ -55,7 +60,7 @@ function firstFixes(events, versions) {
   }
   // A fix in an R release already covers the later R releases of its branch.
   const kept = [...found.values()].filter((v) => ![...found.values()].some((other) => other !== v && versions[other].s === 0 && covers(versions[other], versions[v])));
-  return kept.sort((a, b) => b - a).map((v) => versions[v].v);
+  return kept.sort((a, b) => b - a);
 }
 
 function compareBranches(a, b) {
@@ -197,7 +202,7 @@ function modelSummaries(models, bugs, versions) {
     }
   }
   return [...summaries.values()].filter((summary) => summary.count && summary.last >= 0).map((summary) => ({
-    ...summary, family: modelFamily(summary.model), first: versions[summary.first].v, last: versions[summary.last].v,
+    ...summary, family: modelFamily(summary.model), first: nameOf(versions[summary.first]), last: nameOf(versions[summary.last]),
   }));
 }
 
@@ -219,7 +224,7 @@ function tableText(rows) {
 
 if (typeof module !== "undefined") {
   module.exports = {
-    releaseParts, covers, isPublished, firstFixes, statusAt, branchSupport, supportedBranches, modelFamily, hardwareMatch, selectedFamily, searchTerms, isPrTerm,
+    nameOf, releaseParts, covers, isPublished, firstFixes, statusAt, branchSupport, supportedBranches, modelFamily, hardwareMatch, selectedFamily, searchTerms, isPrTerm,
     matchesTerms, upgradeGroup, upgradePath, versionChanges, upgradeNotices, modelSummaries, officialUrl, tableText,
   };
 }

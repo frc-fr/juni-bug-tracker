@@ -18,6 +18,7 @@ from .versions import SYSTEMS, branch_key, branch_of, entry_key, train_of, versi
 log = logging.getLogger(__name__)
 
 STATUS_CODES = {"resolved": "r", "open": "k", "limitation": "l"}
+UNREAD_REASONS = {"empty for visitors": "empty", "lists in an attachment": "attachment", "holds the SRN of another release": "other"}
 
 
 def load_extracted(directory: Path) -> Dict[str, dict]:
@@ -173,6 +174,8 @@ def build_system(system: str, documents: Dict[str, dict], manifest: Dict[str, di
             else "pending" if train_of(version) == latest_train[branch_of(version)]
             and version_key(version)[3] > latest_service.get(train_of(version), 0) else "none",
             "read": (f"{system}-{version}" in notices_srn) if service else version in own,
+            # Why an article was not read: "empty" for visitors, lists in an "attachment", or the text of an "other" release.
+            "unread": None if f"{system}-{version}" in notices_srn else UNREAD_REASONS.get(articles.get(version, {}).get("unread")),
             "unavailable": not service and version not in own,
             "families": sorted(family_positions[name] for name, _ in doc.get("families", [])),
             "changes": [[family_positions[f], c, text, page] for f, c, text, page in doc.get("changes", [])],

@@ -47,3 +47,20 @@ def test_every_srn_reads_without_security_nor_notes(page):
     assert notice.items and not notice.warnings
     text = " ".join(f"{i['synopsis']} {i['description']}" for i in notice.items)
     assert "SIRT=" not in text and "CVE-" not in text and "Product-Group=" not in text
+
+
+ATTACHMENTS = sorted(Path(os.environ.get("JUNIBUGS_SRN_ATTACHMENTS", ".cache/srn-attachments")).glob("*.pdf"))
+
+
+@pytest.mark.skipif(not ATTACHMENTS, reason="no SRN PDF added by hand")
+@pytest.mark.parametrize("pdf", ATTACHMENTS, ids=lambda path: path.stem)
+def test_srn_pdf_never_reads_the_confidential_part(pdf):
+    import re
+    import fitz
+    from junibugs.srn import parse_srn_pdf
+    lines = [" ".join(line.split()) for page in fitz.open(pdf) for line in page.get_text().splitlines()]
+    cut = next((i for i, line in enumerate(lines) if "List of" in line and line.lower().endswith("confidential")), len(lines))
+    public = {line for line in lines[:cut] if re.fullmatch(r"\d{6,8}", line)}
+    notice = parse_srn_pdf(pdf)
+    assert notice.items and {item["bug_id"] for item in notice.items} <= public
+    assert not any("CVE-" in item["synopsis"] for item in notice.items)

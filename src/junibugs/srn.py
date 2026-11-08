@@ -327,3 +327,89 @@ def parse_article(text: str) -> Notice:
     if not notice.items:
         notice.warnings.append("no issue read")
     return notice
+
+
+# PDF copies of the articles whose lists Lightpanda cannot read, downloaded by hand
+# from the support portal and dropped in .cache/srn-attachments; never fetched by a robot.
+PDF_LIST_TITLE = re.compile(r"^(\d+\.\d+R\d+-S\d+(?:-EVO)?) - List of (Fixed|Known) issues(.*)$", re.I)
+PDF_ID = re.compile(r"^(\d{6,8})$")
+PDF_SEVERITY = re.compile(r"^(Critical|Major|Minor)$")
+PDF_HEADER = {"PR", "Number", "Synopsis"}
+# Older copies print the date, the page number and a local path on top of each page.
+PDF_FURNITURE = re.compile(r"^(\d{1,2}/\d{1,2}/\d{2}, \d{1,2}:\d{2} [AP]M|Page \d+ of \d+|file:///.*|jtac-web\.\S+)$")
+
+
+def parse_srn_pdf(path: Path) -> Notice:
+    """Read the lists of a PDF copy of an SRN.
+
+    Its description column is cut at the right margin, words missing: only the
+    synopsis, complete, and the short "Resolved In" lines are kept.
+    """
+    import fitz
+
+    lines = [" ".join(line.split()) for page in fitz.open(path) for line in page.get_text().splitlines()]
+    lines = [line for line in lines if line and not PDF_FURNITURE.match(line)]
+    notice: Optional[Notice] = None
+    status = None
+    category = None
+    entries: List[dict] = []
+    current: Optional[dict] = None
+    part = None
+    for index, line in enumerate(lines):
+        title = PDF_LIST_TITLE.match(line)
+        if title:
+            if "confidential" in title.group(3).lower():
+                status = None
+                continue
+            version = title.group(1)
+            notice = notice or Notice("evo" if version.endswith("-EVO") else "junos", version.replace("-EVO", ""))
+            status = STATUSES[title.group(2).capitalize()]
+            current = None
+            continue
+        if status is None:
+            continue
+        if line.startswith("Category:"):
+            category, current = line[len("Category:"):].strip(), None
+            continue
+        if line in PDF_HEADER:
+            continue
+        following = lines[index + 1] if index + 1 < len(lines) else ""
+        # A PR number opens an entry, followed by its severity or its synopsis.
+        if PDF_ID.match(line) and (part in (None, "description", "resolved") or PDF_SEVERITY.match(following)):
+            current = {"bug_id": line, "category": category, "severity": None, "synopsis": [], "description": [],
+                       "resolved": [], "status": status, "raw": [line]}
+            entries.append(current)
+            part = "synopsis"
+            continue
+        if current is None:
+            continue
+        current["raw"].append(line)
+        if part == "synopsis" and PDF_SEVERITY.match(line) and not current["synopsis"]:
+            current["severity"] = line
+        elif line.startswith("Product-Group="):
+            part = "description"
+        elif line.startswith("Severity="):
+            current["severity"] = current["severity"] or line.split("=", 1)[1]
+        elif line.startswith("Resolved In:"):
+            part = "resolved"
+            current["resolved"].append(line[len("Resolved In:"):])
+        elif part in ("synopsis", "description", "resolved"):
+            current[part].append(line)
+    if notice is None:
+        raise ValueError("no list of fixed issues")
+    for entry in entries:
+        if SECURITY.search(" ".join(entry["raw"])):
+            notice.skipped += 1
+            continue
+        notice.items.append({
+            "bug_id": entry["bug_id"],
+            "category": entry["category"],
+            "severity": entry["severity"],
+            "synopsis": " ".join(" ".join(entry["synopsis"]).split()),
+            "description": "",
+            "resolved_in": references(" ".join(entry["resolved"])),
+            "status": entry["status"],
+        })
+    if not notice.items:
+        notice.warnings.append("no issue read")
+    return notice

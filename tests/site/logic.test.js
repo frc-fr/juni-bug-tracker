@@ -63,8 +63,8 @@ test("a service release only carries the fixes of its own train", () => {
   assert.strictEqual(logic.statusAt(bug, 3, list).detail.id, "openSince");
   assert.strictEqual(logic.statusAt(bug, 1, list).key, "potential");
   assert.strictEqual(logic.statusAt({ events: [[0, "r"]] }, 4, list).key, "fixed");
-  assert.deepStrictEqual(logic.firstFixes([[0, "r"], [1, "r"], [4, "r"]], list), ["22.2R2"]);
-  assert.deepStrictEqual(logic.firstFixes([[1, "r"], [4, "r"]], list), ["22.2R3-S7", "22.2R2-S9"]);
+  assert.deepStrictEqual(logic.firstFixes([[0, "r"], [1, "r"], [4, "r"]], list), [0]);
+  assert.deepStrictEqual(logic.firstFixes([[1, "r"], [4, "r"]], list), [4, 1]);
 });
 
 test("planned and article-less releases are not the latest one, nor a model's last release", () => {
@@ -74,4 +74,11 @@ test("planned and article-less releases are not the latest one, nor a model's la
   assert.strictEqual([...list].reverse().find(logic.isPublished).v, "24.4R2-S5");
   const summaries = logic.modelSummaries(["MX204"], [{ models: ["MX204"], events: [[0, "k"], [3, "r"]] }], list);
   assert.deepStrictEqual([summaries[0].first, summaries[0].last], ["24.4R2-S4", "24.4R2-S4"]);
+});
+
+test("Evolved releases are named with -EVO", () => {
+  const list = ["24.4R2-S5", "24.4R2-S6"].map((v) => ({ v, name: `${v}-EVO`, ...logic.releaseParts(v) }));
+  assert.strictEqual(logic.nameOf(list[0]), "24.4R2-S5-EVO");
+  assert.strictEqual(logic.statusAt({ events: [[0, "r"]] }, 1, list).detail.version, "24.4R2-S5-EVO");
+  assert.strictEqual(logic.nameOf({ v: "24.4R2-S5" }), "24.4R2-S5");
 });
