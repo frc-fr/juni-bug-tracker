@@ -31,8 +31,8 @@ def load_extracted(directory: Path) -> Dict[str, dict]:
     return documents
 
 
-def workflow_schedule(path: Path) -> Optional[dict]:
-    """The crons of the update workflow, read there so the site cannot contradict it."""
+def read_schedule(path: Path) -> Optional[dict]:
+    """The crons of the automatic update, read in sources/schedule.yml so the site cannot contradict it."""
     text = path.read_text(encoding="utf-8") if path.exists() else ""
     crons = re.findall(r'cron:\s*"([^"]+)"', text)
     timezone_name = re.search(r'timezone:\s*"([^"]+)"', text)
@@ -201,14 +201,14 @@ def build_system(system: str, documents: Dict[str, dict], manifest: Dict[str, di
 
 
 def build_site(
-    extracted: Path, manifest_path: Path, changes_path: Path, lifecycle_path: Path, workflow_path: Path,
+    extracted: Path, manifest_path: Path, changes_path: Path, lifecycle_path: Path, schedule_path: Path,
     sources: Path, dist: Path, base_url: str, srn_path: Path = Path("sources/srn.json"),
 ) -> dict:
     documents = load_extracted(extracted)
     manifest = load_manifest(manifest_path)
     lifecycle = json.loads(lifecycle_path.read_text(encoding="utf-8")) if lifecycle_path.exists() else {"source": None, "branches": {}}
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    schedule = workflow_schedule(workflow_path)
+    schedule = read_schedule(schedule_path)
     all_changes = read_changes(changes_path)
     releases = load_releases(srn_path)
     notices_srn = load_notices(extracted / "srn")

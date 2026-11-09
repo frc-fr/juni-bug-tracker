@@ -1,0 +1,6 @@
+# Automatic update of the data and the site, shown on the site.
+# Keep it in line with what actually starts the "Update data and site" workflow.
+timezone: "Europe/Paris"
+crons:
+  - cron: "15 9,14 * * 1-5"
+  - cron: "0 19 * * 1-5"

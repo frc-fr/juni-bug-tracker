@@ -1,12 +1,6 @@
 name: Update data and site
 
-# The site shows this schedule, read from this file.
 on:
-  schedule:
-    - cron: "15 9,14 * * 1-5"
-      timezone: "Europe/Paris"
-    - cron: "0 19 * * 1-5"
-      timezone: "Europe/Paris"
   workflow_dispatch:
 
 permissions:

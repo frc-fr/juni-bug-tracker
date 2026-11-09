@@ -11,7 +11,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="junibugs")
     parser.add_argument("--manifest", type=Path, default=Path("sources/manifest.json"))
     parser.add_argument("--lifecycle", type=Path, default=Path("sources/lifecycle.json"))
-    parser.add_argument("--workflow", type=Path, default=Path(".github/workflows/update.yml"))
+    parser.add_argument("--schedule", type=Path, default=Path("sources/schedule.yml"))
     parser.add_argument("--srn", type=Path, default=Path("sources/srn.json"))
     parser.add_argument("--cache", type=Path, default=Path(".cache/pdfs"))
     parser.add_argument("--srn-cache", type=Path, default=Path(".cache/srn"))
@@ -47,7 +47,7 @@ def main() -> None:
         sys.exit(1 if problems else 0)
     elif args.command == "build":
         summary = build.build_site(
-            args.output, args.manifest, args.changes, args.lifecycle, args.workflow, args.site, args.dist, args.base_url,
+            args.output, args.manifest, args.changes, args.lifecycle, args.schedule, args.site, args.dist, args.base_url,
             args.srn,
         )
         logging.info("%s", summary)
