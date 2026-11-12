@@ -46,7 +46,9 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; }
 .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
 .view-help { margin: 0 0 12px; font-size: 14px; }
 .tab { font: inherit; padding: 6px 14px; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--muted); cursor: pointer; }
-.systems { display: inline-flex; margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.systems-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.systems-label { font-size: 14px; color: var(--muted); }
+.systems { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
 .systems .tab { border: 0; border-radius: 0; font-size: 14px; padding: 5px 14px; }
 .systems .tab + .tab { border-left: 1px solid var(--line); }
 .tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); font-weight: 600; }

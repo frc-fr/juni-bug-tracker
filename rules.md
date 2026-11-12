@@ -11,7 +11,7 @@ site: https://frc-fr.github.io/juni-bug-tracker/
 
 # Critères communs
 
-Section identique dans forti-, juni-, palo- et cisco-bug-tracker. Toute modification se reporte dans les quatre.
+Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute modification se reporte dans les cinq.
 
 ## Architecture
 
@@ -85,6 +85,20 @@ Section identique dans forti-, juni-, palo- et cisco-bug-tracker. Toute modifica
 - Textes longs justifiés, sur toute la largeur.
 - Cron et date de dernière mise à jour affichés.
 - Placeholders neutres : ne jamais révéler le matériel de l'utilisateur.
+- Même forme dans tous les sites, quelle que soit la façon de présenter du fournisseur : on cherche au même endroit.
+- Données uniformes entre fournisseurs : pas d'information propre à un seul fournisseur si elle n'aide pas l'exploitation (ex. date de mise en vente).
+- Plusieurs systèmes : sélecteur de logiciel, libellé visible « Logiciel », jamais un choix de matériel.
+
+## Matériel et nouveautés
+
+- Onglet Matériel : pastilles de statut (« Tous » en premier, puis « Plus dans la dernière branche » ou son équivalent).
+- Colonnes : Modèle, Première version, Dernière version, Statut <logiciel>, Version recommandée, Fin de support.
+- Statut tiré d'une source officielle du fournisseur : il dit, sans le deviner, si le matériel est encore maintenu.
+- Fin de vie annoncée par référence : variantes affichées séparément, pièces détachées et modules écartés.
+- Pas de source : « Aucune fin annoncée », jamais « supporté ».
+- Version recommandée seulement si le fournisseur la publie sans compte ; sinon la colonne est absente, et la note dit pourquoi.
+- Rechercher : un modèle choisi affiche ce que le fournisseur dit de lui (statut, version recommandée, fin de support).
+- Quoi de neuf : cartes « Dernière version publiée », « Dernier document mis à jour », puis « Recommandée par <fournisseur> » si elle existe.
 
 ## Design
 

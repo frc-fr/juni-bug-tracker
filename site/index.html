@@ -17,10 +17,13 @@
         <h1><span class="brand">JunOS</span> Bug Tracker</h1>
         <p id="scope" data-text="page.scope"></p>
         <p class="privacy" data-text="page.privacy"></p>
-        <nav class="systems" data-label="system.label">
-          <button type="button" id="system-junos" class="tab" aria-pressed="false">Junos OS</button>
-          <button type="button" id="system-evo" class="tab" aria-pressed="false">Junos OS Evolved</button>
-        </nav>
+        <div class="systems-row">
+          <span class="systems-label" data-text="system.label"></span>
+          <nav class="systems" data-label="system.label">
+            <button type="button" id="system-junos" class="tab" aria-pressed="false">Junos OS</button>
+            <button type="button" id="system-evo" class="tab" aria-pressed="false">Junos OS Evolved</button>
+          </nav>
+        </div>
       </div>
       <div class="top-actions">
         <a class="icon-link" href="feed.xml" data-label="news.subscribe">
