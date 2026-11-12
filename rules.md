@@ -147,6 +147,13 @@ Section identique dans forti-, juni-, palo- et cisco-bug-tracker. Toute modifica
 - Chaque PR est dans le chapitre d'une famille (MX Series, EX Series…) : famille fiable.
 - Modèle connu seulement quand le texte le cite.
 - Avec un modèle choisi : PR qui le citent, puis PR de sa famille sans modèle cité.
+- Fin de vie : tableaux « Hardware Dates & Milestones » des séries ACX, EX, MX (page M Series), NFX, PTX, QFX, SRX.
+- Annonces SKU par SKU : seuls les châssis comptent, une alimentation ou un ventilateur ne dit rien du modèle.
+- Une variante (EX4300-32F) peut s'arrêter avant les autres : chaque variante est affichée.
+- « Arrêt après » : LSV avant la dernière branche publiée, ou fin de support passée.
+- Version suggérée : article KB21476, rendu par Lightpanda. « (LSV) » complète une annonce sans LSV.
+- Une ligne KB21476 avec `-EVO` relève d'Evolved ; les annonces sans système vont à Junos OS.
+- Carte « Suggérée par Juniper » : versions des branches encore supportées seulement.
 
 ## Affichage
 

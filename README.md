@@ -52,6 +52,15 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
 - Dates de support : page [Junos OS Dates & Milestones](https://support.juniper.net/support/eol/software/junos/).
   Juniper n'y publie pas de table distincte pour Junos OS Evolved : le site applique les mêmes dates
   et le signale.
+- Matériel : tableaux « Hardware Dates & Milestones » des séries ACX, EX, MX (page « M Series »), NFX,
+  PTX, QFX et SRX sur `support.juniper.net/support/eol/product/`. Ils annoncent la fin de vie SKU par
+  SKU : seuls les SKU de châssis sont gardés (EX4300-48MP, MX2010-BASE-AC), rattachés au modèle du site
+  (EX4300) et à leur variante. Ils donnent la dernière version logicielle (LSV) et la fin de support.
+  Résultat dans `sources/hardware.json`.
+- Version suggérée : article KB21476 « Junos Software Versions - Suggested Releases to Consider and
+  Evaluate », rendu par Lightpanda comme les SRN. Une ligne par plateforme, avec « (LSV) » quand c'est la
+  dernière version supportée. Résultat dans `sources/recommended.json`. Une page illisible garde les
+  dernières valeurs.
 
 ## Mise à jour
 

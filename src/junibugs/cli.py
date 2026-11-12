@@ -4,7 +4,7 @@ import logging
 import sys
 from pathlib import Path
 
-from . import build, collect, extract, lifecycle, srn
+from . import build, collect, extract, hardware, lifecycle, srn
 
 
 def main() -> None:
@@ -13,6 +13,8 @@ def main() -> None:
     parser.add_argument("--lifecycle", type=Path, default=Path("sources/lifecycle.json"))
     parser.add_argument("--schedule", type=Path, default=Path("sources/schedule.yml"))
     parser.add_argument("--srn", type=Path, default=Path("sources/srn.json"))
+    parser.add_argument("--hardware", type=Path, default=Path("sources/hardware.json"))
+    parser.add_argument("--recommended", type=Path, default=Path("sources/recommended.json"))
     parser.add_argument("--cache", type=Path, default=Path(".cache/pdfs"))
     parser.add_argument("--srn-cache", type=Path, default=Path(".cache/srn"))
     parser.add_argument("--srn-attachments", type=Path, default=Path(".cache/srn-attachments"))
@@ -34,6 +36,8 @@ def main() -> None:
         downloaded = collect.download_pdfs(manifest, args.cache, client)
         collect.save_manifest(args.manifest, manifest)
         lifecycle.update_lifecycle(args.lifecycle, client)
+        hardware.update_eol(args.hardware, client)
+        hardware.update_suggested(args.recommended)
         releases = srn.update_releases(args.srn, manifest, client)
         srn.fetch_articles(releases, args.srn_cache, args.output / "srn")
         srn.save_releases(args.srn, releases, srn.load_missing(args.srn))
@@ -48,6 +52,6 @@ def main() -> None:
     elif args.command == "build":
         summary = build.build_site(
             args.output, args.manifest, args.changes, args.lifecycle, args.schedule, args.site, args.dist, args.base_url,
-            args.srn,
+            args.srn, args.hardware, args.recommended,
         )
         logging.info("%s", summary)

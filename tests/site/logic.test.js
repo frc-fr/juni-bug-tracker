@@ -82,3 +82,32 @@ test("Evolved releases are named with -EVO", () => {
   assert.strictEqual(logic.statusAt({ events: [[0, "r"]] }, 1, list).detail.version, "24.4R2-S5-EVO");
   assert.strictEqual(logic.nameOf({ v: "24.4R2-S5" }), "24.4R2-S5");
 });
+
+test("a model is stopped when one of its variants left the latest branch", () => {
+  const entry = {
+    eol: [[["EX4300-48MP"], "TSB109284", "25.4", "2031-12-29", "p"], [["EX4300-32F"], "TSB105633", "21.4", "2029-03-31", "p"]],
+    suggested: [["EX4300", "Latest Junos 21.4R3-Sx", ["21.4R3-Sx"], false, "2025-02-28"]],
+  };
+  const status = logic.hardwareStatus(entry, "25.4", "2026-11-12");
+  assert.strictEqual(status.key, "stopped");
+  assert.deepStrictEqual(status.groups.map((group) => group.stopped), [false, true]);
+  assert.strictEqual(logic.hardwareStatus({ eol: [entry.eol[0]], suggested: [] }, "25.4", "2026-11-12").key, "announced");
+  assert.strictEqual(logic.hardwareStatus({ eol: [], suggested: entry.suggested }, "26.2", "2026-11-12").key, "none");
+});
+
+test("a release suggested as LSV stops the model, an ended support too", () => {
+  const lsv = { eol: [], suggested: [["ACX500", "Latest Junos 20.4 (LSV Outdoor) Latest Junos 21.2 (LSV Indoor)", ["20.4", "21.2"], true, "2024-03-19"]] };
+  const status = logic.hardwareStatus(lsv, "26.2", "2026-11-12");
+  assert.strictEqual(status.key, "stopped");
+  assert.strictEqual(status.groups[0].lastSoftware, "21.2");
+  const ended = { eol: [[["EX2200-24T"], null, null, "2024-06-30", "p"]], suggested: [] };
+  assert.strictEqual(logic.hardwareStatus(ended, "26.2", "2026-11-12").key, "stopped");
+});
+
+test("the LSV of KB21476 completes an announcement of the same model", () => {
+  const entry = { model: "ACX1000", eol: [[["ACX1000"], null, null, "2029-06-28", "p"]], suggested: [["ACX1000", "Latest Junos 21.2 (LSV)", ["21.2"], true, "2024-03-19"]] };
+  const status = logic.hardwareStatus(entry, "26.2", "2026-11-12");
+  assert.strictEqual(status.groups.length, 1);
+  assert.strictEqual(status.groups[0].lastSoftware, "21.2");
+  assert.strictEqual(status.key, "stopped");
+});

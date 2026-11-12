@@ -33,7 +33,14 @@ const system = (() => {
   return wanted in SYSTEMS ? wanted : "junos";
 })();
 const systemName = SYSTEMS[system];
-const state = { view: "bugs", shown: PAGE_SIZE, reading: false, ...defaultFilters() };
+const state = { view: "bugs", shown: PAGE_SIZE, reading: false, hardware: "all", ...defaultFilters() };
+// The status tiles of the Hardware tab, as forti-bug-tracker shows them.
+const HARDWARE_STATES = {
+  all: { label: t("hardware.all"), tone: "all" },
+  none: { label: t("hardware.noEnd"), tone: "fixed" },
+  announced: { label: t("hardware.announced"), tone: "change" },
+  stopped: { label: t("hardware.stopped"), tone: "potential" },
+};
 let versions = [];
 let families = [];
 let models = [];
@@ -41,6 +48,8 @@ let categories = [];
 let bugs = [];
 let changes = [];
 let summaries = [];
+let hardware = { models: {}, general: [] };
+let latestBranch = "";
 let lifecycle = { source: null, branches: {} };
 let notices = {};
 let sources = {};
@@ -500,6 +509,24 @@ function latestCard(title, field) {
   return date ? newsCard(title, formatDate(date), entries) : "";
 }
 
+/** The releases Juniper suggests for the hardware of this system, newest first. */
+function suggestedCard() {
+  if (!hardware.as_of) return "";
+  const releases = new Set();
+  const platforms = [...Object.values(hardware.models).flatMap((entry) => entry.suggested), ...hardware.general];
+  for (const [, , listed, last] of platforms) {
+    // A last supported version is advice for old hardware, not a release to aim for.
+    if (last === true) continue;
+    for (const release of listed) if (/^\d+\.\d+R\d+/.test(release)) releases.add(release);
+  }
+  // Releases for hardware that stays on an old branch are in the Hardware tab; the card keeps the supported branches.
+  const supported = new Set(versions.filter((entry) => entry.support.supported).map((entry) => entry.branch));
+  const sorted = [...releases].filter((release) => supported.has(release.match(/^\d+\.\d+/)[0])).sort((a, b) => b.localeCompare(a, "en", { numeric: true }));
+  if (!sorted.length) return "";
+  const source = `<a href="${escapeHtml(hardware.suggested_source)}" target="_blank" rel="noopener">KB21476</a>`;
+  return `<section class="news-card"><h2>${t("news.recommended")}</h2><strong>${formatDate(hardware.as_of)}</strong><p>${systemName} ${sorted.map(releaseLink).join(", ")}</p><p class="muted">${source}</p></section>`;
+}
+
 function pdfLine(version) {
   const entry = versions.find((candidate) => candidate.v === version);
   if (!entry || !entry.pdf || !entry.revised) return "";
@@ -538,37 +565,142 @@ function clearPanels() {
   $("notices").innerHTML = "";
   $("version-info").innerHTML = "";
   $("upgrade-notices").innerHTML = "";
+  $("recommendation").innerHTML = "";
   $("more").hidden = true;
+}
+
+/** "EX4300-32F : " before a fact on part of a model, nothing when it covers the model itself. */
+function variantPrefix(variants, model) {
+  return variants.length === 1 && variants[0] === model ? "" : `${variants.join(", ")} : `;
+}
+
+/** The hardware rows: the models of the system, what the notes and Juniper say of them. */
+function hardwareRows() {
+  const today = new Date().toISOString().slice(0, 10);
+  const cited = new Map(summaries.map((summary) => [summary.model, summary]));
+  return Object.entries(hardware.models).map(([model, entry]) => ({
+    model, entry, family: modelFamily(model), summary: cited.get(model), status: hardwareStatus({ ...entry, model }, latestBranch, today),
+  }));
+}
+
+function statusText(group, model) {
+  const text = group.stopped ? t("hardware.stoppedAfter", { branch: group.lastSoftware })
+    : group.lastSoftware ? t("hardware.lastBranch", { branch: group.lastSoftware })
+      : group.ended ? t("hardware.supportEnded") : t("hardware.announced");
+  return `${variantPrefix(group.variants, model)}${text}`;
+}
+
+function supportText(group, model) {
+  if (!group.endOfSupport) return "";
+  const date = formatDate(group.endOfSupport);
+  return `${variantPrefix(group.variants, model)}${t(group.ended ? "hardware.endedOn" : "hardware.until", { date })}`;
+}
+
+function statusCell({ model, status }) {
+  if (status.key === "none") return `<span class="badge fixed">${t("hardware.noEnd")}</span>`;
+  return status.groups.map((group) => {
+    const tone = group.stopped || group.ended ? "potential" : "change";
+    const url = group.page || hardware.suggested_source;
+    const title = group.bulletin ? ` title="${escapeHtml(group.bulletin)}"` : "";
+    return `<a class="badge ${tone}" href="${escapeHtml(url)}" target="_blank" rel="noopener"${title}>${escapeHtml(statusText(group, model))}</a>`;
+  }).join(" ");
+}
+
+function supportCell({ model, status }) {
+  const parts = status.groups.filter((group) => group.endOfSupport).map((group) => {
+    const tone = group.ended ? "potential" : "fixed";
+    return `<span class="badge ${tone}">${escapeHtml(supportText(group, model))}</span>`;
+  });
+  return parts.length ? parts.join(" ") : "—";
+}
+
+/** A suggested release links to its R release when the site has it: 24.4R2 for "24.4R2-Sx". */
+function releaseLink(release) {
+  const train = release.match(/^\d+\.\d+R\d+/);
+  if (!train || versionIndex(train[0]) < 0) return escapeHtml(release);
+  const params = new URLSearchParams({ system, version: train[0] });
+  return `<a href="#${escapeHtml(params.toString())}">${escapeHtml(release)}</a>`;
+}
+
+function suggestedText([platform, , releases, last], model) {
+  const prefix = platform === model ? "" : `${platform} : `;
+  return `${prefix}${releases.join(" / ")}${last ? ` (${t("hardware.lsv")})` : ""}`;
+}
+
+function suggestedCell({ model, entry }) {
+  const parts = entry.suggested.filter(([, , releases]) => releases.length).map(([platform, , releases, last]) => {
+    const prefix = platform === model ? "" : `${escapeHtml(platform)} : `;
+    return `<span>${prefix}${releases.map(releaseLink).join(" / ")}${last ? ` <abbr title="${t("hardware.lsvTitle")}">${t("hardware.lsv")}</abbr>` : ""}</span>`;
+  });
+  return parts.length ? parts.join("<br>") : "—";
+}
+
+function modelLink(model, cited) {
+  const params = new URLSearchParams({ system, model: cited ? `m:${model}` : `f:${modelFamily(model)}` });
+  return `<a href="#${escapeHtml(params.toString())}">${escapeHtml(model)}</a>`;
+}
+
+const HARDWARE_COLUMNS = ["model", "first", "last", "status", "release", "support"];
+
+function hardwareTable(rows) {
+  return [HARDWARE_COLUMNS.map((key) => t(`hardware.${key}`, { system: systemName })), ...rows.map((row) => [
+    row.model,
+    row.summary ? row.summary.first : "",
+    row.summary ? row.summary.last : "",
+    row.status.key === "none" ? t("hardware.noEnd") : row.status.groups.map((group) => statusText(group, row.model)).join(" ; "),
+    row.entry.suggested.filter(([, , releases]) => releases.length).map((item) => suggestedText(item, row.model)).join(" ; "),
+    row.status.groups.map((group) => supportText(group, row.model)).filter(Boolean).join(" ; "),
+  ])];
 }
 
 function renderHardware() {
   const terms = searchTerms($("hardware-query").value);
-  const listed = summaries
-    .filter(({ model, family }) => terms.every((term) => `${model} ${family}`.toLowerCase().includes(term)))
+  const matching = hardwareRows().filter(({ model, family, entry }) => {
+    const names = [model, family, ...entry.eol.flatMap(([variants]) => variants), ...entry.suggested.map(([platform]) => platform)];
+    return terms.every((term) => names.join(" ").toLowerCase().includes(term));
+  });
+  const counts = { all: matching.length };
+  for (const row of matching) counts[row.status.key] = (counts[row.status.key] || 0) + 1;
+  $("chips").innerHTML = Object.entries(HARDWARE_STATES)
+    .map(([key, { label, tone }]) => tile("hardware", key, label, tone, counts[key], state.hardware === key)).join("");
+  const listed = matching
+    .filter((row) => state.hardware === "all" || row.status.key === state.hardware)
     .sort((a, b) => a.model.localeCompare(b.model, "fr", { numeric: true }));
-  const columns = ["model", "family", "count", "first", "last"];
-  copiedTable = () => [columns.map((key) => t(`hardware.${key}`)), ...listed.map((entry) => [entry.model, entry.family, entry.count, entry.first, entry.last])];
+  copiedTable = () => hardwareTable(listed);
   $("copy").hidden = !listed.length;
   $("copy").textContent = t("list.copy");
-  $("chips").innerHTML = "";
-  const rows = listed.map((entry) => {
-    const filter = new URLSearchParams({ system, model: `m:${entry.model}` });
-    const family = new URLSearchParams({ system, model: `f:${entry.family}` });
-    return `<tr><th scope="row"><a href="#${escapeHtml(filter.toString())}">${escapeHtml(entry.model)}</a></th>
-      <td><a href="#${escapeHtml(family.toString())}">${escapeHtml(entry.family)}</a></td><td>${formatNumber(entry.count)}</td>
-      <td>${escapeHtml(entry.first)}</td><td>${escapeHtml(entry.last)}</td></tr>`;
-  });
+  const rows = listed.map((row) => `<tr><th scope="row">${modelLink(row.model, Boolean(row.summary))}</th>
+      <td>${row.summary ? escapeHtml(row.summary.first) : "—"}</td><td>${row.summary ? escapeHtml(row.summary.last) : "—"}</td>
+      <td>${statusCell(row)}</td><td>${suggestedCell(row)}</td><td>${supportCell(row)}</td></tr>`);
   $("results").innerHTML = rows.length
-    ? `<table class="hardware-table"><thead><tr>${columns.map((key) => `<th scope="col">${t(`hardware.${key}`)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`
+    ? `<table class="hardware-table"><thead><tr>${HARDWARE_COLUMNS.map((key) => `<th scope="col">${t(`hardware.${key}`, { system: systemName })}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`
     : "";
-  $("count").textContent = rows.length ? t("hardware.listed", { count: formatNumber(rows.length) }) : t("hardware.none");
+  $("count").textContent = rows.length ? "" : t("hardware.none");
   clearPanels();
   $("news-summary").innerHTML = "";
   writeHash();
 }
 
+/** What Juniper says of the selected model, above the bugs. */
+function renderRecommendation() {
+  const model = state.model.startsWith("m:") ? state.model.slice(2) : "";
+  const row = model && hardware.models[model] ? hardwareRows().find((candidate) => candidate.model === model) : null;
+  if (!row || (row.status.key === "none" && !row.entry.suggested.length)) {
+    $("recommendation").innerHTML = "";
+    return;
+  }
+  const parts = [t("advice.model", { model: escapeHtml(model) }), statusCell(row)];
+  if (row.entry.suggested.some(([, , releases]) => releases.length)) {
+    parts.push(`${t("advice.suggested")} ${suggestedCell(row).replace(/<br>/g, " ")}`);
+  }
+  const support = supportCell(row);
+  if (support !== "—") parts.push(support);
+  parts.push(`<a href="${escapeHtml(hardware.suggested_source)}" target="_blank" rel="noopener">${t("advice.source")}</a>`);
+  $("recommendation").innerHTML = parts.map((part) => `<span>${part}</span>`).join("");
+}
+
 function renderNews() {
-  $("news-summary").innerHTML = latestCard(t("news.latestRelease"), "released") + latestCard(t("news.latestPdf"), "revised");
+  $("news-summary").innerHTML = latestCard(t("news.latestRelease"), "released") + latestCard(t("news.latestPdf"), "revised") + suggestedCard();
   const byId = new Map(bugs.map((bug) => [bug.id, bug]));
   const entries = changes.map((change) => {
     const items = change.bugs.slice(0, 20).map((id) => {
@@ -610,6 +742,7 @@ function render() {
   renderChips(counts);
   renderNotices();
   renderVersionInfo();
+  renderRecommendation();
   renderUpgradeNotices();
 
   const waiting = state.view === "upgrade" && (!state.from || !state.version);
@@ -752,7 +885,9 @@ function bindEvents() {
   $("chips").addEventListener("click", (event) => {
     const chip = event.target.closest("button");
     if (!chip) return;
-    if (chip.dataset.scope) {
+    if (chip.dataset.hardware) {
+      update({ hardware: chip.dataset.hardware });
+    } else if (chip.dataset.scope) {
       update({ scope: chip.dataset.scope });
     } else if (chip.dataset.group) {
       update({ group: chip.dataset.group });
@@ -814,6 +949,13 @@ async function start() {
   schedule = index.schedule;
   bugs = data.bugs.map(hydrate);
   summaries = modelSummaries(models, bugs, versions);
+  hardware = index.hardware;
+  latestBranch = [...versions].reverse().find(isPublished).branch;
+  if (hardware.as_of) {
+    $("recommended-note").innerHTML = t("hardware.recommended", {
+      eol: escapeHtml(hardware.eol_source), url: escapeHtml(hardware.suggested_source), date: formatDate(hardware.as_of), branch: escapeHtml(latestBranch),
+    });
+  }
 
   for (const key of ["version", "from", "model", "category"]) {
     combos[key] = new Combobox($(key), (value) => update({ [key]: value }));

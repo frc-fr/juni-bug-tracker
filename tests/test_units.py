@@ -172,3 +172,63 @@ def test_an_article_is_rendered_again_only_when_it_changed(tmp_path):
     # Unread pages wait for a change; a lost result of a read page is rendered again.
     assert not needs_rendering("junos-22.1R3-S4", {"lastmod": "2026-10-16", "rendered": "2026-10-16", "unread": "empty for visitors"}, tmp_path)
     assert needs_rendering("junos-24.2R2-S1", {"lastmod": "2026-10-16", "rendered": "2026-10-16"}, tmp_path)
+
+
+from junibugs.hardware import chassis_of, hardware_index, parse_series, parse_suggested
+
+
+def test_chassis_skus_name_their_model_and_parts_are_left_out():
+    assert chassis_of("EX4300-48MP-TAA") == ("EX4300", "EX4300-48MP")
+    assert chassis_of("MX2010-BASE-AC") == ("MX2010", "MX2010")
+    assert chassis_of("SRX345-SYS-JB") == ("SRX345", "SRX345")
+    assert chassis_of("EX4300-FAN") is None
+    assert chassis_of("B-EX4300-48MP-EDU") is None
+    assert chassis_of("JPSU-1400-AC-A") is None
+
+
+def test_series_page_keeps_chassis_announcements_only():
+    head = "<tr><th>Technical Support Bulletin (TSB)</th><th>SKU Description</th></tr>"
+    recent = (
+        "<tr><td>TSB109284 - End of Life Announcement: EX4300-48MP</td><td>EX4300-48MP, EX4300-48MP-TAA, JPSU-1400-AC-A</td>"
+        "<td>06/29/2026</td><td>12/29/2026</td><td>12/29/2027</td><td>12/29/2029</td><td>25.4</td><td>12/29/2031</td></tr>"
+        "<tr><td>TSB107601 - SKU Renaming Announcement: EX4300-48T</td><td>EX4300-48T</td>"
+        "<td>05/15/2026</td><td>11/15/2026</td><td>N/A</td><td>N/A</td><td>N/A</td><td>06/30/2027</td></tr>"
+        "<tr><td>TSB98158 - End of Life Announcement: Power Supply SKU</td><td>JPSU-1100-AC-AFO</td>"
+        "<td>06/02/2025</td><td>06/02/2025</td><td>06/02/2026</td><td>06/02/2028</td><td>N/A</td><td>03/31/2029</td></tr>"
+    )
+    old = (
+        "<tr><td>EX2200-24T-4G, EX2200-48T-4G</td><td>02/01/2019</td><td>06/30/2019</td><td>06/30/2020</td>"
+        "<td>06/30/2024</td><td>06/30/2024</td><td>06/30/2024</td></tr>"
+    )
+    found = parse_series(f"<table>{head}{recent}</table><table><tr><th>Product</th></tr>{old}</table>", "u")
+    assert found == [
+        {"model": "EX4300", "variants": ["EX4300-48MP"], "bulletin": "TSB109284", "announced": "2026-06-29",
+         "last_software": "25.4", "end_of_support": "2031-12-29", "page": "u"},
+        {"model": "EX2200", "variants": ["EX2200-24T", "EX2200-48T"], "bulletin": None, "announced": "2019-02-01",
+         "last_software": None, "end_of_support": "2024-06-30", "page": "u"},
+    ]
+
+
+def test_suggested_releases_of_kb21476():
+    markdown = "\n".join([
+        "| Platform | Junos Software by Platform | Last  Updated | Notes |",
+        "| [EX4300 ](https://x) | Latest Junos 21.4R3\\-Sx | 2025\\-2\\-28 |  |",
+        "| [ACX500 ](https://x) | Latest Junos 20.4 \\(LSV Outdoor\\)  Latest Junos 21.2 \\(LSV Indoor\\) | 2024\\-3\\-19 |  |",
+        "| [PTX10003 ](https://x) | Latest Junos Evolved 24.4R2\\-Sx\\-EVO | 2024\\-11\\-26 | EVO Platform |",
+        "| [MX Series ](https://x) | Latest Junos 23.4R2\\-Sx | 2025\\-6\\-17 |  |",
+    ])
+    platforms = parse_suggested(markdown)
+    assert [(p["platform"], p["releases"], p["system"], p["last"], p["updated"]) for p in platforms] == [
+        ("EX4300", ["21.4R3-Sx"], "junos", False, "2025-02-28"),
+        ("ACX500", ["20.4", "21.2"], "junos", True, "2024-03-19"),
+        ("PTX10003", ["24.4R2-Sx"], "evo", False, "2024-11-26"),
+        ("MX Series", ["23.4R2-Sx"], "junos", False, "2025-06-17"),
+    ]
+    index = hardware_index("evo", ["PTX10001"], {"announcements": []}, {"source": "s", "platforms": platforms})
+    assert sorted(index["models"]) == ["PTX10001", "PTX10003"]
+    assert index["general"] == [] and index["as_of"] == "2024-11-26"
+    junos = hardware_index("junos", [], {"announcements": [{"model": "EX2200", "variants": ["EX2200-24T"], "bulletin": None,
+                                                            "last_software": None, "end_of_support": "2024-06-30", "page": "u"}]},
+                           {"source": "s", "platforms": platforms})
+    assert sorted(junos["models"]) == ["ACX500", "EX2200", "EX4300"]
+    assert junos["general"] == [["MX Series", "Latest Junos 23.4R2-Sx", ["23.4R2-Sx"], "2025-06-17"]]

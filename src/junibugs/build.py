@@ -11,6 +11,7 @@ from typing import Dict, List, Optional
 from .collect import load_manifest, revision_date
 from .extract import read_changes
 from .feed import build_feed, latest_changes
+from .hardware import hardware_index, load
 from .normalize import UNCATEGORIZED, families_in, family_of_model, models_in, normalize_category
 from .srn import article_url, load_releases
 from .versions import SYSTEMS, branch_key, branch_of, entry_key, train_of, version_key
@@ -56,7 +57,8 @@ def load_notices(directory: Path) -> Dict[str, dict]:
 
 
 def build_system(system: str, documents: Dict[str, dict], manifest: Dict[str, dict], lifecycle: dict,
-                 releases: Dict[str, dict], notices_srn: Dict[str, dict]) -> dict:
+                 releases: Dict[str, dict], notices_srn: Dict[str, dict],
+                 eol: Optional[dict] = None, suggested: Optional[dict] = None) -> dict:
     """Index and bugs of one system; the PR numbers are shared, the facts are not.
 
     The Release Notes give the R releases. The service releases come from their
@@ -191,6 +193,7 @@ def build_system(system: str, documents: Dict[str, dict], manifest: Dict[str, di
         "sources": {key: {"version": notices_srn[key]["version"], "system": notices_srn[key]["system"], "article": url}
                     for key, url in sources.items()},
         "lifecycle": {**lifecycle, "shared": system == "evo"},
+        "hardware": hardware_index(system, models, eol, suggested),
     }
     notices = {
         version: [[None if f is None else family_positions.get(f), title, page] for f, title, page in doc.get("notices", [])]
@@ -203,6 +206,7 @@ def build_system(system: str, documents: Dict[str, dict], manifest: Dict[str, di
 def build_site(
     extracted: Path, manifest_path: Path, changes_path: Path, lifecycle_path: Path, schedule_path: Path,
     sources: Path, dist: Path, base_url: str, srn_path: Path = Path("sources/srn.json"),
+    eol_path: Path = Path("sources/hardware.json"), suggested_path: Path = Path("sources/recommended.json"),
 ) -> dict:
     documents = load_extracted(extracted)
     manifest = load_manifest(manifest_path)
@@ -212,6 +216,7 @@ def build_site(
     all_changes = read_changes(changes_path)
     releases = load_releases(srn_path)
     notices_srn = load_notices(extracted / "srn")
+    eol, suggested = load(eol_path), load(suggested_path)
 
     if dist.exists():
         shutil.rmtree(dist)
@@ -219,7 +224,7 @@ def build_site(
     summary = {}
     descriptions: Dict[str, str] = {}
     for system in SYSTEMS:
-        data = build_system(system, documents, manifest, lifecycle, releases, notices_srn)
+        data = build_system(system, documents, manifest, lifecycle, releases, notices_srn, eol, suggested)
         data["index"].update({"updated": updated, "schedule": schedule})
         changes = latest_changes([c for c in all_changes if c["system"] == system], documents)
         folder = dist / "data" / system
@@ -238,6 +243,7 @@ def build_site(
             "with model": sum(1 for row in rows if row[4]),
             "service releases": sum(1 for v in data["index"]["versions"] if v["service"]),
             "with severity": sum(1 for row in rows if row[7]),
+            "hardware": len(data["index"]["hardware"]["models"]),
         }
     (dist / "feed.xml").write_bytes(build_feed(latest_changes(all_changes, documents), descriptions, base_url))
     return summary
