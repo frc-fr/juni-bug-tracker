@@ -583,17 +583,34 @@ function hardwareRows() {
   }));
 }
 
-function statusText(group, model) {
+function statusLabel(group) {
   const text = group.stopped ? t("hardware.stoppedAfter", { branch: group.lastSoftware })
     : group.lastSoftware ? t("hardware.lastBranch", { branch: group.lastSoftware })
       : group.ended ? t("hardware.supportEnded") : t("hardware.announced");
-  return `${variantPrefix(group.variants, model)}${text}`;
+  return text;
+}
+
+function statusText(group, model) {
+  return `${variantPrefix(group.variants, model)}${statusLabel(group)}`;
+}
+
+function supportLabel(group) {
+  return t(group.ended ? "hardware.endedOn" : "hardware.until", { date: formatDate(group.endOfSupport) });
 }
 
 function supportText(group, model) {
-  if (!group.endOfSupport) return "";
-  const date = formatDate(group.endOfSupport);
-  return `${variantPrefix(group.variants, model)}${t(group.ended ? "hardware.endedOn" : "hardware.until", { date })}`;
+  return group.endOfSupport ? `${variantPrefix(group.variants, model)}${supportLabel(group)}` : "";
+}
+
+/** A group's variants beside its badge: three at most, all of them in the tooltip (a bulletin can name dozens). */
+function variantsHtml(variants, model) {
+  if (variants.length === 1 && variants[0] === model) return "";
+  const more = variants.length > 3 ? ` ${t("hardware.moreVariants", { count: variants.length - 3 })}` : "";
+  return ` <span class="hardware-variants" title="${escapeHtml(variants.join(", "))}">${escapeHtml(variants.slice(0, 3).join(", "))}${more}</span>`;
+}
+
+function groupHtml(badge, group, model) {
+  return `<span class="hardware-group">${badge}${variantsHtml(group.variants, model)}</span>`;
 }
 
 function statusCell({ model, status }) {
@@ -602,14 +619,14 @@ function statusCell({ model, status }) {
     const tone = group.stopped || group.ended ? "potential" : "change";
     const url = group.page || hardware.suggested_source;
     const title = group.bulletin ? ` title="${escapeHtml(group.bulletin)}"` : "";
-    return `<a class="badge ${tone}" href="${escapeHtml(url)}" target="_blank" rel="noopener"${title}>${escapeHtml(statusText(group, model))}</a>`;
+    return groupHtml(`<a class="badge ${tone}" href="${escapeHtml(url)}" target="_blank" rel="noopener"${title}>${escapeHtml(statusLabel(group))}</a>`, group, model);
   }).join(" ");
 }
 
 function supportCell({ model, status }) {
   const parts = status.groups.filter((group) => group.endOfSupport).map((group) => {
     const tone = group.ended ? "potential" : "fixed";
-    return `<span class="badge ${tone}">${escapeHtml(supportText(group, model))}</span>`;
+    return groupHtml(`<span class="badge ${tone}">${escapeHtml(supportLabel(group))}</span>`, group, model);
   });
   return parts.length ? parts.join(" ") : "—";
 }
@@ -700,7 +717,7 @@ function renderRecommendation() {
 }
 
 function renderNews() {
-  $("news-summary").innerHTML = latestCard(t("news.latestRelease"), "released") + latestCard(t("news.latestPdf"), "revised") + suggestedCard();
+  $("news-summary").innerHTML = latestCard(t("news.latestRelease"), "released") + latestCard(t("news.latestNote"), "revised") + suggestedCard();
   const byId = new Map(bugs.map((bug) => [bug.id, bug]));
   const entries = changes.map((change) => {
     const items = change.bugs.slice(0, 20).map((id) => {

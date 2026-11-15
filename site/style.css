@@ -144,6 +144,11 @@ details.notice p { margin: 6px 0 2px; }
 .hardware-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .hardware-table th, .hardware-table td { padding: 8px 14px; text-align: left; border-top: 1px solid var(--line); }
 .hardware-table thead th { border-top: 0; font-size: 13px; font-weight: 600; color: var(--text); background: var(--bg); }
+.hardware-table tbody th, .hardware-table td:nth-child(2), .hardware-table td:nth-child(3) { white-space: nowrap; }
+.hardware-group { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; }
+.hardware-table .hardware-group { display: flex; }
+.hardware-table .hardware-group + .hardware-group { margin-top: 4px; }
+.hardware-variants { font-size: 12px; color: var(--muted); }
 .legal { padding-bottom: 32px; }
 .legal h2 { margin: 0 0 8px; font-size: 20px; }
 .legal h3 { margin: 18px 0 4px; font-size: 15px; }

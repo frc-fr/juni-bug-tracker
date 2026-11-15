@@ -3,6 +3,8 @@
 Site statique de suivi des bugs (PR) de Junos OS et de Junos OS Evolved et de leurs corrections,
 construit à partir des Release Notes publiques de Juniper Networks.
 
+Site : https://frc-fr.github.io/juni-bug-tracker/
+
 Ce projet est indépendant. Il n'est affilié ni à Juniper Networks ni à HPE.
 Les informations sont fournies à titre indicatif : vérifiez toujours la documentation officielle.
 
@@ -11,9 +13,10 @@ Les informations sont fournies à titre indicatif : vérifiez toujours la docume
 - Recherche par numéro de PR ou mots-clés, par version et par matériel
 - Junos OS et Junos OS Evolved, chacun avec ses propres données
 - Mise en avant des branches supportées, sans masquer les autres
-- Comparaison de deux versions : PR corrigés, nouveaux problèmes ouverts, changements de comportement
-  (« What's Changed ») des notes traversées et chapitres de mise à niveau à lire
-- Liste des modèles cités dans les PR
+- Comparaison de deux versions : PR corrigés, nouveaux problèmes ouverts, problèmes toujours présents,
+  changements de comportement (« What's Changed ») des notes traversées et chapitres de mise à niveau à lire
+- Onglet Matériel : versions dont les notes citent chaque modèle, statut, version suggérée et fin de
+  support selon Juniper
 - Suivi des nouveautés, avec un flux RSS/Atom
 - Interface en français et en anglais
 
@@ -26,7 +29,7 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
   l'historique du PR.
 - Chaque PR est rangé dans le chapitre d'une famille (MX Series, EX Series…). Le modèle précis n'est
   connu que lorsque le texte le cite. Le filtre matériel est donc inclusif : avec un modèle choisi, il
-  garde les PR qui le citent et ceux de sa famille qui ne citent aucun modèle.
+  garde les PR qui le citent, ceux qui ne citent que sa famille et ceux qui ne citent aucun matériel.
 - Les avis de sécurité sont écartés et les références CVE retirées des descriptions.
 
 ## Sources
@@ -65,11 +68,19 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
 ## Mise à jour
 
 Un traitement GitHub Actions s'exécute du lundi au vendredi à 9 h 15, 14 h 15 et 19 h 00, heure de
-Paris, et sur lancement manuel. Il collecte, extrait, contrôle, puis publie le site sur GitHub Pages. Si
+Paris, et sur lancement manuel. Cet horaire est décrit dans `sources/schedule.yml`, que le site lit pour
+l'afficher. Il collecte, extrait, contrôle, puis publie le site sur GitHub Pages. Si
 un contrôle échoue, le site garde ses dernières données valides.
 
 À chaque passage, les PDF déjà connus ne sont vérifiés que par une requête HEAD, et seuls les articles
 SRN nouveaux ou modifiés depuis le dernier passage sont affichés et relus.
+
+## Liens utiles chez Juniper
+
+- [Junos Software Versions - Suggested Releases to Consider and Evaluate](https://supportportal.juniper.net/s/article/Junos-Software-Versions-Suggested-Releases-to-Consider-and-Evaluate) (KB21476)
+- [Junos OS Dates & Milestones](https://support.juniper.net/support/eol/software/junos/) : dates de support des branches
+- [SRN Definitions of Severity](https://supportportal.juniper.net/s/article/SRN-Definitions-of-Severity) : sévérités affichées sur le site
+- [Portail de support](https://supportportal.juniper.net/) : compte requis pour certains contenus
 
 ## Développement
 

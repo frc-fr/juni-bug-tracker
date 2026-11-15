@@ -4,7 +4,7 @@ title: Règles de juni-bug-tracker
 description: Règles communes aux bug trackers et particularités de Junos OS et Junos OS Evolved.
 resource: https://github.com/frc-fr/juni-bug-tracker
 tags: [rules, junos, juniper, hpe, bug-tracker]
-timestamp: 2026-11-09T18:30:00+01:00
+timestamp: 2026-11-15T20:00:00+01:00
 product: Junos OS, Junos OS Evolved
 site: https://frc-fr.github.io/juni-bug-tracker/
 ---
@@ -21,7 +21,8 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
   - `collect` : met à jour l'état des sources et télécharge ce qui a changé.
   - `extract` : lit les documents en cache ; échoue au moindre avertissement.
   - `build` : croise les données et génère `dist/`.
-- Modules : `collect`, `parser`, `extract`, `normalize` (matériel), `lifecycle` (dates de support), `build`, `feed`, `cli`.
+- Modules communs : `collect`, `parser`, `extract`, `normalize` (matériel), `build`, `feed`, `cli`.
+- Modules propres au fournisseur (dates de support, fin de vie du matériel, sources annexes) : nommés d'après ce qu'ils lisent, décrits dans ses particularités.
 
 ### Répertoires
 
@@ -63,7 +64,7 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 - Chaque fait renvoie à la page officielle exacte qui le porte.
 - Textes des bugs laissés en anglais, tels que publiés.
 - Statuts déduits des notes, jamais inventés ; « Inconnu » expliqué et masqué par défaut.
-- Un modèle cité ne veut pas dire « seul ce modèle est touché ». Filtre matériel inclusif.
+- Un modèle cité ne veut pas dire « seul ce modèle est touché ». Filtre matériel inclusif : avec un modèle choisi, bugs qui le citent, ceux qui ne citent que sa famille et ceux qui ne citent aucun matériel.
 - Un bug à la fois correction et changement de comportement n'est compté qu'une fois.
 - Une version annoncée mais pas encore publiée est marquée « non publiée ».
 - Toutes les branches restent consultables ; les branches supportées sont mises en avant.
@@ -91,18 +92,20 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 
 ## Matériel et nouveautés
 
-- Onglet Matériel : pastilles de statut (« Tous » en premier, puis « Plus dans la dernière branche » ou son équivalent).
-- Colonnes : Modèle, Première version, Dernière version, Statut <logiciel>, Version recommandée, Fin de support.
+- Onglet Matériel : pastilles « Tous », « Aucune fin annoncée », « Fin de vie annoncée », « Plus maintenu », dans cet ordre.
+- « Plus maintenu » : le fournisseur ne publie plus de version pour ce modèle (dernière version avant la dernière branche, fin de maintenance logicielle ou fin de support passée). La note de l'onglet dit laquelle.
+- Colonnes : Modèle, Première version, Dernière version, Statut <logiciel>, Version recommandée, Fin de support. Mêmes libellés partout.
+- Filtre « Modèle ou famille » ; un modèle qu'aucun bug ne cite renvoie vers sa famille.
 - Statut tiré d'une source officielle du fournisseur : il dit, sans le deviner, si le matériel est encore maintenu.
 - Fin de vie annoncée par référence : variantes affichées séparément, pièces détachées et modules écartés.
 - Pas de source : « Aucune fin annoncée », jamais « supporté ».
-- Version recommandée seulement si le fournisseur la publie sans compte ; sinon la colonne est absente, et la note dit pourquoi.
+- Version recommandée seulement si le fournisseur la publie sans compte ; sinon la colonne est absente, et la note dit pourquoi. Libellé fidèle au mot du fournisseur (« suggérée », « actuelles ») : ne pas affirmer plus que lui.
 - Rechercher : un modèle choisi affiche ce que le fournisseur dit de lui (statut, version recommandée, fin de support).
-- Quoi de neuf : cartes « Dernière version publiée », « Dernier document mis à jour », puis « Recommandée par <fournisseur> » si elle existe.
+- Quoi de neuf : cartes « Dernière version publiée », « Dernière note mise à jour », puis la version recommandée du fournisseur si elle existe, avec son mot (« Recommandée par Fortinet », « Suggérée par Juniper »).
 
 ## Design
 
-- Même structure et mêmes jetons de couleur dans les trois sites.
+- Même structure et mêmes jetons de couleur dans les cinq sites.
 - Couleur du fournisseur en touche seulement : bordure haute et nom du produit.
 - Contraste professionnel, rien qui « pique les yeux ».
 - Cohérence entre pages : mêmes pastilles partout, pas de tuiles géantes.
@@ -123,12 +126,14 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 - Mentions légales FR et EN, avec la liste des services et composants tiers.
 - Code sous AGPL 3.0 ou ultérieure ; contenus du fournisseur exclus.
 - README générique : rien de sensible ni de personnel.
+- Plan unique des README : Fonctionnalités, Ce que disent les notes, Sources, Mise à jour, Liens utiles chez <fournisseur>, Développement, Licence, Contact.
+- Plan unique des particularités de ce fichier : Logiciels (si plusieurs), Versions, Sources, Extraction, Matériel, Affichage, Citations.
 
 # Particularités Junos
 
-## Deux systèmes
+## Deux logiciels
 
-- Junos OS et Junos OS Evolved : données séparées, sélecteur en haut de page.
+- Junos OS et Junos OS Evolved : sélecteur « Logiciel », données séparées.
 - Numéros partagés : le système fait partie de la clé.
 - En Evolved, toujours afficher le suffixe `-EVO` (`24.4R2-S5-EVO`) : l'utilisateur ne doit pas confondre.
 
@@ -148,13 +153,17 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 - Aucune page parcourue : HEAD sur les PDF connus, et sur quelques adresses candidates.
 - www.juniper.net jamais interrogé : robots.txt interdit. Entrée `"manual": true` téléchargée une fois.
 - Articles SRN des -S sur supportportal.juniper.net : sitemap, puis HEAD sur l'adresse prévisible.
-- Articles rendus par Lightpanda (JavaScript). Seulement « Fixed issues » et « Known issues ».
-- Partie « Confidential », entrées de sécurité et notes internes jamais lues.
+- Articles rendus par Lightpanda (JavaScript).
 - Article rendu seulement s'il est nouveau ou si son lastmod a changé.
-- SRN illisible (vide, pièce jointe, texte d'une autre version) : raison affichée, statuts partiels.
 - PDF de SRN déposés à la main dans `.cache/srn-attachments` : lus après l'article.
-- Lien vers l'article SRN, pas vers le PDF.
 - Dates de support : page Junos OS Dates & Milestones. Pas de table Evolved : mêmes dates, réserve affichée.
+
+## Extraction
+
+- PDF des notes : chaque PR est lu dans le chapitre de sa famille.
+- SRN : seulement « Fixed issues » et « Known issues ».
+- Partie « Confidential », entrées de sécurité et notes internes jamais lues.
+- SRN illisible (vide, pièce jointe, texte d'une autre version) : raison affichée, statuts partiels.
 
 ## Matériel
 
@@ -172,8 +181,10 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 ## Affichage
 
 - Identifiants préfixés `PR`.
+- Lien vers l'article SRN, pas vers le PDF.
 - Sévérité Juniper affichée, avec lien vers les définitions Juniper en pied de page.
 - « What's Changed » des notes traversées dans la comparaison.
+- Couleur de marque : vert Juniper.
 
 # Citations
 
