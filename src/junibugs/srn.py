@@ -140,11 +140,19 @@ def update_releases(path: Path, manifest: Dict[str, dict], client) -> Dict[str, 
 
 RENDERER_ENV = "JUNIBUGS_LIGHTPANDA"
 RENDER_TIMEOUT = 120
+# A row opens with its PR number, a link or a bare number, and may give its severity.
+PR_CELL = r"^\| (?:\[(\d{6,8})\]\([^)]*\)|(\d{6,8}))\s*(Critical|Major|Minor)?\s*\| "
 # The synopsis ends with its product group: a "|" inside a quoted command cannot shift the columns.
-ROW = re.compile(r"^\| \[(\d{6,8})\]\([^)]*\)\s*(Critical|Major|Minor)?\s*\| (.*?)\s*Product-Group=\S+(?:\s+Severity=(\w+))?\s*\| (.*) \|\s*$")
-SHORT_ROW = re.compile(r"^\| \[(\d{6,8})\]\([^)]*\)\s*(Critical|Major|Minor)?\s*\| (.*) \|\s*$")
-# Most tables have a Synopsis column; some articles only give the description.
-CATEGORY_ROW = re.compile(r"^\| PR Number \|( Synopsis \|)? Category: (.*?) \|\s*$")
+ROW = re.compile(PR_CELL + r"(.*?)\s*Product-Group=\S+(?:\s+Severity=(\w+))?\s*\| (.*) \|\s*$")
+# Some rows lack the product group, their text cut short: read only when no "|" can shift the columns.
+PLAIN_ROW = re.compile(PR_CELL + r"([^|]*?)\s*\| ([^|]*?)\s*\|\s*$")
+SHORT_ROW = re.compile(PR_CELL + r"(.*) \|\s*$")
+# A list without category nor description: the synopsis only.
+SYNOPSIS_ROW = re.compile(PR_CELL + r"(?:(.*?)\s*Product-Group=\S+(?:\s+Severity=(\w+))?|([^|]*?))\s*\|\s*$")
+# Most tables have a Synopsis column and a category; some articles only give the description,
+# one gives the synopsis only, without category.
+CATEGORY_ROW = re.compile(r"^\| (?:PR )?Number \|( Synopsis \|)? Category: (.*?) \|\s*$")
+SYNOPSIS_HEADER = re.compile(r"^\| (?:PR )?Number \| Synopsis \|\s*$")
 TITLE = re.compile(r"^# (\d+\.\d+R\d+-S\d+(?:-EVO)?): Software Release Notification")
 MAX_SYNOPSIS = 220
 SECTION = re.compile(r"^## (\d+\.\d+R\d+-S\d+(?:-EVO)?) - List of (Fixed|Known) issues(.*)$", re.I)
@@ -167,6 +175,30 @@ def renderer() -> List[str]:
     return shlex.split(command)
 
 
+# The frame Juniper draws around the text of every article: once it is in the output,
+# the article is drawn, with or without lists.
+ARTICLE_FRAME = re.compile(r"^## Alert Type\s*$", re.M)
+
+
+class EmptyArticle(Exception):
+    """The article is drawn, without any list for visitors."""
+
+
+def check_rendering(url: str, output: str, returncode: int) -> str:
+    """The output of Lightpanda when it holds the lists of the article.
+
+    Raise EmptyArticle when the article is drawn without its lists, RuntimeError when
+    the rendering failed: an empty output, or a page without the frame of the article.
+    """
+    # Some articles leave the lists to an attachment: the wait then times out on a complete page.
+    if "List of" in output or ATTACHED in output:
+        return output
+    if ARTICLE_FRAME.search(output):
+        raise EmptyArticle(f"{url}: the article shows no list to visitors")
+    raise RuntimeError(f"{url}: rendering failed (exit {returncode}, {len(output.strip())} characters"
+                       f"{'' if output.strip() else ', empty output'})")
+
+
 def render_article(url: str) -> str:
     """The article as markdown, once its JavaScript has drawn the lists."""
     command = renderer() + [
@@ -175,10 +207,7 @@ def render_article(url: str) -> str:
         "--wait-ms", "90000", "--dump", "markdown", url,
     ]
     result = subprocess.run(command, capture_output=True, text=True, timeout=RENDER_TIMEOUT)
-    # Some articles leave the lists to an attached file: the wait then times out on a complete page.
-    if "List of" in result.stdout or ATTACHED in result.stdout:
-        return result.stdout
-    raise RuntimeError(f"{url}: rendering failed ({result.returncode})")
+    return check_rendering(url, result.stdout, result.returncode)
 
 
 def needs_rendering(key: str, entry: dict, extracted: Path) -> bool:
@@ -186,32 +215,45 @@ def needs_rendering(key: str, entry: dict, extracted: Path) -> bool:
 
     The rendering is recorded in sources/srn.json and its result committed in
     data/: losing the cache of the runner never makes every article rendered again.
+    A failed rendering is not recorded: the article is rendered again on the next run.
     """
-    rendered = entry.get("rendered")
-    if rendered is None:
+    rendered_on = entry.get("rendered")
+    if rendered_on is None:
         return True
-    if entry.get("lastmod") and entry["lastmod"] != rendered:
+    if entry.get("lastmod") and entry["lastmod"] != rendered_on:
         return True
     return not (extracted / f"{key}.json").exists() and not entry.get("unread")
 
 
-def fetch_articles(releases: Dict[str, dict], cache: Path, extracted: Path, delay: float = 2.0) -> List[str]:
+def fetch_articles(releases: Dict[str, dict], cache: Path, extracted: Path, delay: float = 2.0,
+                   render=None) -> List[str]:
+    """Render the new and changed articles into the cache; `render` stands for render_article in tests."""
+    render = render or render_article
     cache.mkdir(parents=True, exist_ok=True)
     fetched = []
     for key, entry in sorted(releases.items()):
         if not needs_rendering(key, entry, extracted):
             continue
         try:
-            text = render_article(entry["article"])
-        except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+            text = render(entry["article"])
+        except EmptyArticle as empty:
             # An article drawn empty for visitors is kept as unread until it changes.
-            log.error("%s: %s", key, error)
+            log.warning("%s", empty)
             entry["rendered"] = entry.get("lastmod") or "unknown"
             entry["unread"] = "empty for visitors"
+            entry.pop("render_failed", None)
+            continue
+        except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+            # Not recorded as rendered: tried again on the next run; the report calls it unreachable.
+            log.warning("%s: %s", key, error)
+            entry.pop("rendered", None)
+            entry.pop("unread", None)
+            entry["render_failed"] = str(error) or type(error).__name__
             continue
         (cache / f"{key}.md").write_text(text, encoding="utf-8")
         entry["rendered"] = entry.get("lastmod") or "unknown"
         entry.pop("unread", None)
+        entry.pop("render_failed", None)
         if (ATTACHED in text and "List of" not in text) or ATTACHMENT_LINK.search(text):
             entry["unread"] = "lists in an attachment"
             log.warning("%s: the lists are in an attachment the page does not link", key)
@@ -273,19 +315,35 @@ def first_sentence(text: str) -> str:
     return sentence if len(sentence) <= MAX_SYNOPSIS else sentence[:MAX_SYNOPSIS].rsplit(" ", 1)[0] + "…"
 
 
-def parse_row(line: str, category: Optional[str], synopsis_column: bool = True) -> Optional[dict]:
-    if synopsis_column:
+def parse_row(line: str, category: Optional[str], columns: str = "synopsis") -> Optional[dict]:
+    """One row of a list; `columns` says its layout: "synopsis" (synopsis and description),
+    "description" (the description only) or "two" (the synopsis only, without category)."""
+    if columns == "synopsis":
         match = ROW.match(line)
+        if match:
+            linked, bare, severity, synopsis, stated, description = match.groups()
+            severity = severity or stated
+        else:
+            match = PLAIN_ROW.match(line)
+            if not match:
+                return None
+            linked, bare, severity, synopsis, description = match.groups()
+    elif columns == "two":
+        match = SYNOPSIS_ROW.match(line)
         if not match:
             return None
-        bug_id, severity, synopsis, stated, description = match.groups()
+        linked, bare, severity, synopsis, stated, plain = match.groups()
         severity = severity or stated
+        synopsis = synopsis if synopsis is not None else plain
+        # Nothing but the synopsis: the site shows it as the description, without detail.
+        description = synopsis
     else:
         match = SHORT_ROW.match(line)
         if not match:
             return None
-        bug_id, severity, description = match.groups()
+        linked, bare, severity, description = match.groups()
         synopsis = first_sentence(description.split("Resolved In:")[0].replace("*", " "))
+    bug_id = linked or bare
     product = PRODUCT.search(synopsis)
     if product:
         severity = severity or product.group(1)
@@ -311,7 +369,7 @@ def parse_article(text: str, url: str = "") -> Notice:
     notice: Optional[Notice] = None
     status = None
     category = None
-    synopsis_column = True
+    columns = "synopsis"
     title = None
     heading = ""
     confidential = False
@@ -342,6 +400,8 @@ def parse_article(text: str, url: str = "") -> Notice:
                 continue
             notice = notice or Notice("evo" if version.endswith("-EVO") else "junos", version.replace("-EVO", ""))
             status, confidential = STATUSES[section.group(2).capitalize()], False
+            # Each list states its own columns: no category is carried from the list before.
+            category, columns = None, "synopsis"
             headings[heading] = True
             continue
         if line.startswith("## "):
@@ -354,12 +414,16 @@ def parse_article(text: str, url: str = "") -> Notice:
             listed.setdefault(listing.group(1), (url, heading))
         if status is None:
             continue
-        row_heading = CATEGORY_ROW.match(line)
+        header = line.replace("**", "")  # bold headers; a lone "*" belongs to the category
+        row_heading = CATEGORY_ROW.match(header)
         if row_heading:
-            synopsis_column = bool(row_heading.group(1))
+            columns = "synopsis" if row_heading.group(1) else "description"
             category = row_heading.group(2).strip()
             continue
-        row = parse_row(line, category, synopsis_column)
+        if SYNOPSIS_HEADER.match(header):
+            columns, category = "two", None
+            continue
+        row = parse_row(line, category, columns)
         if not row:
             if listing:
                 findings.append(finding("not_understood", "row_unknown", url, heading, [listing.group(1)],

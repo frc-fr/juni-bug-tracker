@@ -168,7 +168,8 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 - www.juniper.net jamais interrogé : robots.txt interdit. Entrée `"manual": true` téléchargée une fois.
 - Articles SRN des -S sur supportportal.juniper.net : sitemap, puis HEAD sur l'adresse prévisible.
 - Articles rendus par Lightpanda (JavaScript).
-- Article rendu seulement s'il est nouveau ou si son lastmod a changé.
+- Article rendu seulement s'il est nouveau, si son lastmod a changé ou si son rendu a échoué.
+- Rendu échoué (erreur, délai dépassé, sortie vide ou sans le cadre « Alert Type » de l'article) : retenté au passage suivant, jamais mémorisé comme vide. Cadre présent sans liste : article vide pour les visiteurs.
 - PDF de SRN déposés à la main dans `.cache/srn-attachments` : lus après l'article.
 - Dates de support : page Junos OS Dates & Milestones. Pas de table Evolved : mêmes dates, réserve affichée.
 
@@ -176,9 +177,11 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 
 - PDF des notes : chaque PR est lu dans le chapitre de sa famille.
 - SRN : seulement « Fixed issues » et « Known issues ».
+- Formes de liste SRN lues : `PR Number | Synopsis | Category` (synopsis et description), `PR Number | Category` (description seule, synopsis = sa première phrase), `PR Number | Synopsis` sans catégorie (synopsis seul, repris en description) ; en-têtes en gras et numéro sans lien acceptés. Ligne sans `Product-Group=` lue seulement si elle n'a pas d'autre « | » que ses séparateurs de colonnes.
+- Catégorie remise à zéro à chaque liste : jamais reprise de la liste précédente.
 - Partie « Confidential », entrées de sécurité et notes internes jamais lues.
 - SRN illisible (vide, pièce jointe, texte d'une autre version) : raison affichée, statuts partiels.
-- Règles propres à Juniper : `no_family` (PDF sans chapitre de famille connue), `family_unknown` (problèmes d'un chapitre sans famille connue), `no_issue` (aucun problème lu), `no_revision_history` (date de publication introuvable), `row_unknown` (ligne de SRN impossible à découper), `confidential` (partie « Confidential », sans identifiants puisqu'elle n'est pas lue), `srn_empty`, `srn_attachment`, `srn_other_release` (SRN illisible, sans copie PDF).
+- Règles propres à Juniper : `no_family` (PDF sans chapitre de famille connue), `family_unknown` (problèmes d'un chapitre sans famille connue), `no_issue` (aucun problème lu), `no_revision_history` (date de publication introuvable), `row_unknown` (ligne de SRN impossible à découper), `confidential` (partie « Confidential », sans identifiants puisqu'elle n'est pas lue), `srn_empty`, `srn_attachment`, `srn_other_release` (SRN illisible, sans copie PDF), `render_failed` (rendu Lightpanda échoué : inaccessible, retenté au passage suivant).
 - PR listé dans un PDF : tout numéro `PR…` d'une section de problèmes (« Open Issues », « Resolved Issues », « Known Limitations », ou tout titre parlant d'issues, bugs, limitations), même sous un titre inconnu. « Page » : le PDF à la page du PR ; « où » : famille / section.
 - PR listé dans un SRN : ligne de tableau dont la première cellule commence par un numéro, lien ou pas ; hors partie « Confidential ». « Page » : l'article ; « où » : titre de la liste.
 - PR cités dans « What's Changed » ou dans le texte d'un article : contenus non exploités, pas listés.

@@ -163,6 +163,84 @@ def test_srn_article():
     assert notice.items[1]["description"] == ""
 
 
+def test_srn_list_without_category_nor_description():
+    # junos-22.2R3-S8: the known issues give the synopsis only.
+    article = ARTICLE.replace("## Modification History", """## 22.2R3\\-S7 \\- List of Known issues
+| PR Number | Synopsis |
+|---|---|
+| [1965832](https://prsearch.juniper.net/PR1965832) Major | DNS cache failure on SRX platforms Product\\-Group=junos |
+| PR Number | Synopsis |
+| [1700008](https://prsearch.juniper.net/PR1700008) Critical | Without product group |
+| [1700009](https://prsearch.juniper.net/PR1700009) Major | A vulnerability \\(CVE\\-2024\\-1\\) Product\\-Group=junos |
+## Modification History""")
+    notice = parse_article(article)
+    found = {i["bug_id"]: i for i in notice.items}
+    assert found["1965832"] == {"bug_id": "1965832", "category": None, "severity": "Major", "status": "open",
+                                "synopsis": "DNS cache failure on SRX platforms",
+                                "description": "DNS cache failure on SRX platforms", "resolved_in": []}
+    assert (found["1700008"]["synopsis"], found["1700008"]["severity"]) == ("Without product group", "Critical")
+    assert "1700009" not in found and notice.skipped == 2 and not notice.warnings
+
+
+def test_srn_rows_without_product_group():
+    # PR 1807892: a row cut short; PR 1862907: a bare number under a bold header.
+    article = ARTICLE.replace("## Modification History", """| PR Number | Synopsis | Category: Track PRs in BGP BMP area |
+| [1807892](https://prsearch.juniper.net/PR1807892) Major | A route stuck in  | A route can get stuck in  |
+| **Number** | **Synopsis** | **Category: QFX5000 EVO Interfaces** |
+| 1862907 | QFX5000s ZTP failed on WAN ports |  QFX5000s ZTP failed on WAN ports Resolved In:   |
+## Modification History""")
+    notice = parse_article(article)
+    found = {i["bug_id"]: i for i in notice.items}
+    assert found["1807892"] == {"bug_id": "1807892", "category": "Track PRs in BGP BMP area", "severity": "Major",
+                                "status": "open", "synopsis": "A route stuck in",
+                                "description": "A route can get stuck in", "resolved_in": []}
+    assert found["1862907"] == {"bug_id": "1862907", "category": "QFX5000 EVO Interfaces", "severity": None,
+                                "status": "open", "synopsis": "QFX5000s ZTP failed on WAN ports",
+                                "description": "QFX5000s ZTP failed on WAN ports", "resolved_in": []}
+    assert not notice.warnings and notice.accounting()["failed"] == set()
+
+
+def test_rendering_tells_a_failure_from_an_empty_article():
+    import pytest
+    from junibugs.srn import EmptyArticle, check_rendering
+    frame = "Log in\n\n## Alert Type\nSRN \\- Software Release Notification\n\n## Solution\n"
+    lists = frame + "## 22.2R3\\-S7 \\- List of Fixed issues\n| PR Number | Synopsis | Category: BGP |\n"
+    assert check_rendering("u", lists, 0) == lists
+    attached = frame + "The list of fixed issues is included in the attachment.\n"
+    assert check_rendering("u", attached, 1) == attached
+    with pytest.raises(EmptyArticle):
+        check_rendering("u", frame, 1)
+    for failed in ("", "   \n", "[Skip to Main Content](javascript:void(0);)\nLoading\n"):
+        with pytest.raises(RuntimeError):
+            check_rendering("u", failed, 1)
+
+
+def test_a_failed_rendering_is_tried_again_and_reported(tmp_path):
+    import subprocess
+    from junibugs.extract import Tally, extract_srn
+    from junibugs.srn import EmptyArticle, fetch_articles, needs_rendering
+
+    def render(url):
+        if url.endswith("empty"):
+            raise EmptyArticle(f"{url}: no list")
+        raise subprocess.TimeoutExpired("lightpanda", 120)
+
+    releases = {"junos-22.1R3-S4": {"system": "junos", "version": "22.1R3-S4", "lastmod": "2026-10-16", "article": "u/empty"},
+                "junos-22.1R3-S5": {"system": "junos", "version": "22.1R3-S5", "lastmod": "2026-10-16", "article": "u/failed",
+                                    "rendered": "2026-10-01", "unread": "empty for visitors"}}
+    assert fetch_articles(releases, tmp_path / "cache", tmp_path / "srn", delay=0, render=render) == []
+    empty, failed = releases["junos-22.1R3-S4"], releases["junos-22.1R3-S5"]
+    assert empty["unread"] == "empty for visitors" and empty["rendered"] == "2026-10-16"
+    assert not needs_rendering("junos-22.1R3-S4", empty, tmp_path / "srn")
+    assert "rendered" not in failed and "unread" not in failed and "timed out" in failed["render_failed"]
+    assert needs_rendering("junos-22.1R3-S5", failed, tmp_path / "srn")
+    (tmp_path / "srn.json").write_text(json.dumps({"releases": list(releases.values())}))
+    tally = Tally({})
+    extract_srn(tmp_path / "srn.json", tmp_path / "cache", tmp_path / "srn", tmp_path / "attachments", tally)
+    rules = {d["key"]: [(f["kind"], f["rule"]) for f in d["findings"]] for d in tally.entries}
+    assert rules == {"junos-22.1R3-S4": [("left_out", "srn_empty")], "junos-22.1R3-S5": [("unreachable", "render_failed")]}
+
+
 def test_an_article_is_rendered_again_only_when_it_changed(tmp_path):
     from junibugs.srn import needs_rendering
     (tmp_path / "junos-22.2R3-S7.json").write_text("{}")
@@ -235,8 +313,8 @@ def test_suggested_releases_of_kb21476():
 
 
 def test_every_listed_pr_of_an_article_is_accounted_for():
-    article = ARTICLE.replace("## Modification History", "| [1700006](https://prsearch.juniper.net/PR1700006) Major | Cut | Cut |\n"
-                              "| 1700007 | Bare number | Bare number |\n## Modification History")
+    article = ARTICLE.replace("## Modification History", "| [1700006](https://prsearch.juniper.net/PR1700006) Major | Cut | a | b |\n"
+                              "| 1700007 | One cell |\n## Modification History")
     notice = parse_article(article, "https://article")
     buckets = notice.accounting()
     assert buckets["read"] == {"1793435", "1700002", "1700004"}

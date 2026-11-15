@@ -190,7 +190,8 @@ def extract_srn(srn_path: Path, cache: Path, output: Path, attachments: Path, ta
     """Read the rendered SRN articles, or the PDF copies added by hand, into data/extracted/srn/.
 
     A PDF copy replaces the article of the same release, which may be shown empty to
-    visitors. An article without file in the cache keeps its committed reading, uncounted.
+    visitors. An article without file in the cache keeps its committed reading, uncounted,
+    unless its rendering failed: it is then unreachable.
     """
     output.mkdir(parents=True, exist_ok=True)
     releases = load_releases(srn_path)
@@ -227,6 +228,12 @@ def extract_srn(srn_path: Path, cache: Path, output: Path, attachments: Path, ta
                 findings.append(report.finding("left_out", "srn_other_release", url, "", [],
                                                f"the article holds the SRN of {notice.version}"))
                 notice = None
+            if entry.get("render_failed") and source.suffix != ".pdf":
+                findings.append(report.finding("unreachable", "render_failed", url, "", [],
+                                               f"the new version of the article was not rendered: {entry['render_failed']}"))
+        elif entry.get("render_failed"):
+            findings.append(report.finding("unreachable", "render_failed", url, "", [],
+                                           f"the article was not rendered: {entry['render_failed']}"))
         elif entry.get("unread") in UNREAD_RULES:
             rule, detail = UNREAD_RULES[entry["unread"]]
             findings.append(report.finding("left_out", rule, url, "", [], detail))

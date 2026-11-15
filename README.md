@@ -54,8 +54,9 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
   est rendu par [Lightpanda](https://lightpanda.io), un navigateur sans interface. Seules les listes
   « Fixed issues » et « Known issues » sont lues ; une partie marquée « Confidential », les entrées de
   sécurité et les notes internes ne le sont jamais. Le champ « Resolved In » indique les autres versions
-  corrigées. Un article n'est rendu que s'il est nouveau ou si sa date de modification dans le sitemap a
-  changé. Le résultat est commité dans `data/` : vider le cache de la CI ne relance pas le rendu de tous les
+  corrigées. Un article n'est rendu que s'il est nouveau, si sa date de modification dans le sitemap a
+  changé ou si son dernier rendu a échoué : un rendu échoué est retenté au passage suivant et l'article
+  compte comme inaccessible, alors qu'un article qui s'affiche sans liste est mémorisé comme vide. Le résultat est commité dans `data/` : vider le cache de la CI ne relance pas le rendu de tous les
   articles. Les numéros suivants ne sont vérifiés que sur la dernière version R de chaque branche.
 - Dates de support : page [Junos OS Dates & Milestones](https://support.juniper.net/support/eol/software/junos/).
   Juniper n'y publie pas de table distincte pour Junos OS Evolved : le site applique les mêmes dates
