@@ -14,6 +14,7 @@ from .feed import build_feed, latest_changes
 from .hardware import hardware_index, load
 from .normalize import UNCATEGORIZED, families_in, family_of_model, models_in, normalize_category
 from .srn import article_url, load_releases
+from .report import load as load_report
 from .versions import SYSTEMS, branch_key, branch_of, entry_key, train_of, version_key
 
 log = logging.getLogger(__name__)
@@ -207,6 +208,7 @@ def build_site(
     extracted: Path, manifest_path: Path, changes_path: Path, lifecycle_path: Path, schedule_path: Path,
     sources: Path, dist: Path, base_url: str, srn_path: Path = Path("sources/srn.json"),
     eol_path: Path = Path("sources/hardware.json"), suggested_path: Path = Path("sources/recommended.json"),
+    report_path: Path = Path("data/report.json"),
 ) -> dict:
     documents = load_extracted(extracted)
     manifest = load_manifest(manifest_path)
@@ -246,4 +248,8 @@ def build_site(
             "hardware": len(data["index"]["hardware"]["models"]),
         }
     (dist / "feed.xml").write_bytes(build_feed(latest_changes(all_changes, documents), descriptions, base_url))
+    # What the last run could not read, for etat.html.
+    processing = load_report(report_path)
+    processing["updated"] = updated
+    (dist / "data" / "report.json").write_text(json.dumps(processing, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     return summary

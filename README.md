@@ -18,6 +18,7 @@ Les informations sont fournies à titre indicatif : vérifiez toujours la docume
 - Onglet Matériel : versions dont les notes citent chaque modèle, statut, version suggérée et fin de
   support selon Juniper
 - Suivi des nouveautés, avec un flux RSS/Atom
+- Page « État du traitement », en bas de page : ce que le dernier traitement n'a pas lu, et pourquoi
 - Interface en français et en anglais
 
 Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enregistrés ni transmis.
@@ -31,6 +32,10 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
   connu que lorsque le texte le cite. Le filtre matériel est donc inclusif : avec un modèle choisi, il
   garde les PR qui le citent, ceux qui ne citent que sa famille et ceux qui ne citent aucun matériel.
 - Les avis de sécurité sont écartés et les références CVE retirées des descriptions.
+- Chaque PR listé par une note ou un article SRN finit lu, écarté par une règle (sécurité, partie
+  « Confidential », SRN vide ou en pièce jointe) ou non compris. Un PR compté nulle part rend le document
+  « suspect ». Une ligne de SRN que le code ne sait pas découper est « non comprise » : le reste de
+  l'article est publié, et la page « État du traitement » la montre.
 
 ## Sources
 
@@ -69,8 +74,10 @@ Vos recherches et vos filtres restent dans votre navigateur : ils ne sont ni enr
 
 Un traitement GitHub Actions s'exécute du lundi au vendredi à 9 h 15, 14 h 15 et 19 h 00, heure de
 Paris, et sur lancement manuel. Cet horaire est décrit dans `sources/schedule.yml`, que le site lit pour
-l'afficher. Il collecte, extrait, contrôle, puis publie le site sur GitHub Pages. Si
-un contrôle échoue, le site garde ses dernières données valides.
+l'afficher. Il collecte, extrait, publie le site sur GitHub Pages, puis contrôle. Ce que le code ne sait pas
+lire est publié dans `data/report.json` et sur la page « État du traitement » ; le passage finit en échec
+pour le signaler. La mise à jour ne s'arrête que si moins de 75 % des documents sont lus : le site garde
+alors sa version précédente.
 
 À chaque passage, les PDF déjà connus ne sont vérifiés que par une requête HEAD, et seuls les articles
 SRN nouveaux ou modifiés depuis le dernier passage sont affichés et relus.
@@ -100,6 +107,7 @@ Pour récupérer les documents puis prévisualiser le site :
 ```sh
 .venv/bin/junibugs collect
 .venv/bin/junibugs extract
+.venv/bin/junibugs check
 .venv/bin/junibugs --base-url http://localhost:8010/ build
 python3 -m http.server 8010 --directory dist
 ```

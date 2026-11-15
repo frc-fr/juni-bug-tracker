@@ -3,18 +3,25 @@
 The PDFs have a real text layer and bookmarks: one top-level bookmark per product
 family ("Junos OS Release Notes for MX Series"), with "Open Issues", "Resolved
 Issues", "Known Limitations" and "What's Changed" under it. Each issue is a bullet
-ending with its PR number. Anything that does not fit is reported in `warnings`
-rather than dropped.
+ending with its PR number. Anything that does not fit is reported rather than
+dropped.
+
+Every PR number of an issue section ends in one bucket of the processing report:
+read, left out by a known rule ("ruled"), or not understood ("failed"). A number of
+such a section found in none of them is a silent path of the code: the report calls
+the PDF suspect. The PR numbers cited elsewhere, as in "What's Changed", are listed
+as content the site does not use.
 """
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 import fitz
 
 from .normalize import canonical_family, models_in
+from .report import accounting, finding
 
 PR = re.compile(r"\bPR\s?(\d{6,8})\b")
 ENDS_WITH_PR = re.compile(r"\bPR\s?\d{6,8}\s*[.,;)]*\s*$")
@@ -32,6 +39,12 @@ SECTIONS = [
     (r"^what.s changed", "changed"),
 ]
 UPGRADE_CHAPTER = re.compile(r"upgrade|migration", re.I)
+# A section that lists bugs, even under a title the code does not know.
+ISSUE_SECTION = re.compile(r"issue|bug|limitation|caveat|problem|fixe", re.I)
+# The frame of every Release Notes PDF, not its content: never reported as content left unread.
+FRAME = re.compile(
+    r"^(table of contents|cover page|introduction|finding more information|requesting technical support|"
+    r"documentation feedback)$", re.I)
 MAX_SUMMARY = 220
 DASH = "—"
 
@@ -46,6 +59,7 @@ class Section:
     last_page: int
     next_title: Optional[str]
     categories: List[str]
+    chapter: str = ""
 
 
 @dataclass
@@ -65,8 +79,30 @@ class Document:
     observations: List[dict]
     changes: List[list]
     notices: List[list]
-    warnings: List[str]
+    # What is not read, and why: a known rule ("left_out"), or a layout to adapt the code to.
+    findings: List[dict] = field(default_factory=list)
     pages: Dict[str, Optional[int]] = field(default_factory=dict)
+    # PR number: (page, place) where the PDF lists it.
+    listed: Dict[str, Tuple[str, str]] = field(default_factory=dict)
+    # Each chapter and section title, and whether the site reads something under it.
+    headings: Dict[str, bool] = field(default_factory=dict)
+    # PR numbers cited outside the issue sections.
+    prose: Set[str] = field(default_factory=set)
+
+    @property
+    def warnings(self) -> List[str]:
+        """What the code cannot read: it has to be adapted."""
+        return [f"{f['where'] or 'PDF'}: {f['count']} PRs, {f['detail']}" if f["count"] else f"{f['where'] or 'PDF'}: {f['detail']}"
+                for f in self.findings if f["kind"] == "not_understood"]
+
+    @property
+    def skipped(self) -> int:
+        """The security fixes left out."""
+        return sum(f["count"] for f in self.findings if f["rule"] == "security")
+
+    def accounting(self) -> Dict[str, Set[str]]:
+        """Each PR number the PDF lists, in one bucket: read, ruled out, failed, or unaccounted."""
+        return accounting(set(self.listed), {o["bug_id"] for o in self.observations}, self.findings)
 
 
 def normalize_title(text: str) -> str:
@@ -78,25 +114,23 @@ def section_kind(title: str) -> Optional[str]:
     return next((kind for pattern, kind in SECTIONS if re.match(pattern, name)), None)
 
 
-def find_sections(doc: fitz.Document, warnings: List[str]) -> Tuple[List[Section], List[list]]:
-    """Return the sections to read and the [family, page] of each family chapter."""
+def find_sections(doc: fitz.Document) -> Tuple[List[Section], List[list]]:
+    """Return every section of the chapters, and the [family, page] of each family chapter.
+
+    A section outside a chapter of a known family has no family: the code does not read it.
+    """
     toc = [(level, " ".join(title.split()), page) for level, title, page in doc.get_toc()]
     sections: List[Section] = []
     families: List[list] = []
-    family = None
+    family, chapter = None, ""
     for index, (level, title, page) in enumerate(toc):
         if level == 1:
             match = FAMILY_CHAPTER.search(title)
-            family = canonical_family(match.group(1)) if match else None
-            if match and not family:
-                warnings.append(f"unknown family {match.group(1)!r}")
+            family, chapter = (canonical_family(match.group(1)) if match else None), title
             if family and family not in [name for name, _ in families]:
                 families.append([family, page])
             continue
-        if level != 2 or not family:
-            continue
-        kind = section_kind(title)
-        if not kind:
+        if level != 2:
             continue
         following = next((entry for entry in toc[index + 1:] if entry[0] <= 2), None)
         children = []
@@ -109,12 +143,13 @@ def find_sections(doc: fitz.Document, warnings: List[str]) -> Tuple[List[Section
         sections.append(Section(
             family=family,
             title=title,
-            kind=kind,
+            kind=section_kind(title),
             release=release.group(1) if release else None,
             first_page=page,
             last_page=following[2] if following else len(doc),
             next_title=following[1] if following else None,
             categories=children,
+            chapter=chapter,
         ))
     return sections, families
 
@@ -269,12 +304,27 @@ def change_starts(item: Optional[Item], rest: str) -> bool:
     return item is None or not item.lines or DASH in rest[:150] or not any(DASH in line for line in item.lines[:3])
 
 
-def parse_issues(doc: fitz.Document, section: Section, warnings: List[str]) -> List[dict]:
+def pr_pages(lines: List[Tuple[int, str]]) -> Dict[str, int]:
+    """Each PR number of the lines, with the page where it first shows; "PR" may end a line."""
+    found: Dict[str, int] = {}
+    text, starts = "", []
+    for page, line in lines:
+        starts.append((len(text), page))
+        text += line + "\n"
+    for match in PR.finditer(text):
+        page = next(page for offset, page in reversed(starts) if offset <= match.start())
+        found.setdefault(match.group(1), page)
+    return found
+
+
+def parse_issues(doc: fitz.Document, section: Section, findings: List[dict], listed: Dict[str, Tuple[str, str]],
+                 link) -> List[dict]:
     lines = section_lines(doc, section)
+    where = f"{section.family} / {section.title}"
+    for bug_id, page in pr_pages(lines).items():
+        listed.setdefault(bug_id, (link(page), where))
     categories = section.categories + contents_categories(lines)
     observations = []
-    found = set()
-    skipped = set()
     for item in read_items(lines, categories, issue_starts, loose=True):
         raw = join_lines(item.lines)
         ids = list(dict.fromkeys(PR.findall(raw)))
@@ -282,11 +332,10 @@ def parse_issues(doc: fitz.Document, section: Section, warnings: List[str]) -> L
             # Mostly limitations without PR: nothing to follow from a version to the next.
             continue
         if VULNERABILITY.search(raw):
-            skipped.update(ids)
+            findings.append(finding("left_out", "security", link(item.page), where, ids, "a vulnerability fix in an issue list"))
             continue
         description, workaround = clean_description(raw)
         for bug_id in ids:
-            found.add(bug_id)
             observation = {
                 "bug_id": bug_id,
                 "status": section.kind,
@@ -299,10 +348,7 @@ def parse_issues(doc: fitz.Document, section: Section, warnings: List[str]) -> L
             if section.release:
                 observation["release"] = section.release
             observations.append(observation)
-    expected = set(PR.findall("\n".join(text for _, text in lines)))
-    missing = sorted(expected - found - skipped)
-    if missing:
-        warnings.append(f"{section.family} {section.title}: {len(missing)} PRs not parsed: {missing[:5]}")
+    # A PR number of the section that no item holds is "unaccounted" in the report.
     return observations
 
 
@@ -367,24 +413,55 @@ def chapter_models(doc: fitz.Document) -> List[str]:
     return sorted({model for title in titles for model in models_in(title)})
 
 
-def parse_pdf(path: Path) -> Document:
+def parse_pdf(path: Path, url: str = "") -> Document:
+    """Read a Release Notes PDF; `url` is its official address, for the report to point to a page."""
     doc = fitz.open(path)
-    warnings: List[str] = []
-    sections, families = find_sections(doc, warnings)
+
+    def link(page: int) -> str:
+        return f"{url}#page={page}"
+
+    findings: List[dict] = []
+    listed: Dict[str, Tuple[str, str]] = {}
+    headings: Dict[str, bool] = {}
+    sections, families = find_sections(doc)
     if not families:
-        warnings.append("no product family chapter")
+        findings.append(finding("not_understood", "no_family", url, "", [], "no chapter of a known product family"))
     observations: List[dict] = []
     changes: List[list] = []
     for section in sections:
-        if section.kind == "changed":
+        if section.family and section.kind == "changed":
             changes.extend(parse_changes(doc, section))
-        else:
-            observations.extend(parse_issues(doc, section, warnings))
+        elif section.family and section.kind:
+            observations.extend(parse_issues(doc, section, findings, listed, link))
+        elif section.kind != "changed" and (section.kind or ISSUE_SECTION.search(section.title)):
+            # Issues the code does not read: a family it does not know, or a title it does not know.
+            where = " / ".join(part for part in (section.family or section.chapter, section.title) if part)
+            found = pr_pages(section_lines(doc, section))
+            for bug_id, page in found.items():
+                listed.setdefault(bug_id, (link(page), where))
+            if found and not section.family:
+                findings.append(finding("not_understood", "family_unknown", link(section.first_page), where, list(found),
+                                        "issues of a chapter that names no product family the code knows"))
+            elif found:
+                findings.append(finding("not_understood", "status_unknown", link(section.first_page), where, list(found),
+                                        "a section of issues whose title says neither open, resolved nor limitation"))
     if not observations:
-        warnings.append("no issue at all")
+        findings.append(finding("not_understood", "no_issue", url, "", [], "no issue read in the PDF"))
     released, revised, page = revision_dates(doc)
     if not released:
-        warnings.append("no revision history")
+        findings.append(finding("not_understood", "no_revision_history", link(page) if page else url, "Revision History", [],
+                                "no dated revision: the release date is unknown"))
+    notices = extract_notices(doc)
+    for level, title, _ in doc.get_toc():
+        title = " ".join(title.replace("’", "'").split())
+        if level > 2 or FRAME.match(title):
+            continue
+        chapter = FAMILY_CHAPTER.search(title)
+        used = (bool(chapter and canonical_family(chapter.group(1))) or bool(section_kind(title))
+                or bool(UPGRADE_CHAPTER.search(title)) or (title == "Revision History" and bool(released)))
+        headings[title] = headings.get(title, False) or used
+    text = "\n".join(sheet.get_text() for sheet in doc)
+    prose = set(PR.findall(text)) - set(listed)
     return Document(
         released=released,
         revised=revised,
@@ -392,7 +469,10 @@ def parse_pdf(path: Path) -> Document:
         models=chapter_models(doc),
         observations=observations,
         changes=changes,
-        notices=extract_notices(doc),
-        warnings=warnings,
+        notices=notices,
+        findings=findings,
         pages={"revisions": page},
+        listed=listed,
+        headings=headings,
+        prose=prose,
     )

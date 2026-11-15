@@ -57,12 +57,10 @@ jobs:
       - name: Collect the Release Notes
         run: junibugs collect
 
-      # Any warning stops here: the site keeps its last valid data.
+      # Stops here only when too few documents are read: the site then keeps its last version.
+      # Otherwise what the code cannot read goes to data/report.json, shown on etat.html.
       - name: Extract the problem reports
         run: junibugs extract
-
-      - name: Check the real PDFs
-        run: pytest -m corpus
 
       - name: Commit the data
         run: |
@@ -83,3 +81,12 @@ jobs:
 
       - id: deploy
         uses: actions/deploy-pages@v4
+
+      # After the publication: a red run asks for the code to be adapted, the site is already up to date.
+      - name: Check the real PDFs
+        if: success()
+        run: pytest -m corpus
+
+      - name: Check the processing report
+        if: success() || failure()
+        run: junibugs check

@@ -9,6 +9,11 @@ browser, then its "List of Fixed issues" and "List of Known issues" are read.
 A part marked "Confidential" is never read, nor are security entries, as the
 site does not deal with security, nor descriptions that are notes between
 engineers.
+
+Every PR number of a table row of the article ends in one bucket of the processing
+report: read, left out by a known rule (security), or not understood (a row the code
+cannot split). A row found in none of them, as a table under a title the code does
+not know, is "unaccounted": the report calls the article suspect.
 """
 import json
 import os
@@ -19,8 +24,9 @@ import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
+from .report import accounting, finding
 from .versions import SYSTEMS, branch_key, branch_of, entry_key, parse_reference, train_of, version_key
 
 log = logging.getLogger(__name__)
@@ -146,6 +152,13 @@ PRODUCT = re.compile(r"\s*Product-Group=\S+(?:\s+Severity=(\w+))?\s*$")
 ATTACHED = "included in the attachment"
 ATTACHMENT_LINK = re.compile(r"See \[Attachment\]\(")
 CREATED = re.compile(r"^Created(\d{4}-\d{2}-\d{2})$", re.M)
+# A table row that opens with a PR number: what the article lists, even in a form the code does not read.
+LISTED_ROW = re.compile(r"^\|\s*\[?(\d{6,8})\b")
+CITED = re.compile(r"\bPR\s?#?(\d{6,8})\b")
+# The frame of every SRN article, not its content: never reported as content left unread.
+FRAME = re.compile(
+    r"^(alert type|product affected|alert description|download junos software service release:?|call to action|solution|"
+    r"affected product series / features|\d+\.\d+R\d+-S\d+(-EVO)?: Software Release Notification.*|[\W_]*)$", re.I)
 
 
 def renderer() -> List[str]:
@@ -217,9 +230,29 @@ class Notice:
     version: str
     created: Optional[str] = None
     items: List[dict] = field(default_factory=list)
-    skipped: int = 0
     internal: int = 0
-    warnings: List[str] = field(default_factory=list)
+    # What is not read, and why: a known rule ("left_out"), or a layout to adapt the code to.
+    findings: List[dict] = field(default_factory=list)
+    # PR number: (page, place) where the article lists it.
+    listed: Dict[str, Tuple[str, str]] = field(default_factory=dict)
+    # Each section title, and whether the site reads something under it.
+    headings: Dict[str, bool] = field(default_factory=dict)
+    # PR numbers cited outside the lists.
+    prose: Set[str] = field(default_factory=set)
+
+    @property
+    def warnings(self) -> List[str]:
+        """What the code cannot read: it has to be adapted."""
+        return [f"{f['where'] or 'article'}: {f['detail']}" for f in self.findings if f["kind"] == "not_understood"]
+
+    @property
+    def skipped(self) -> int:
+        """The security entries left out."""
+        return sum(f["count"] for f in self.findings if f["rule"] == "security")
+
+    def accounting(self) -> Dict[str, Set[str]]:
+        """Each PR number the article lists, in one bucket: read, ruled out, failed, or unaccounted."""
+        return accounting(set(self.listed), {i["bug_id"] for i in self.items}, self.findings)
 
 
 def unescape(text: str) -> str:
@@ -272,47 +305,68 @@ def parse_row(line: str, category: Optional[str], synopsis_column: bool = True) 
     }
 
 
-def parse_article(text: str) -> Notice:
-    """Read the "List of Fixed issues" and "List of Known issues" of a rendered SRN."""
+def parse_article(text: str, url: str = "") -> Notice:
+    """Read the "List of Fixed issues" and "List of Known issues" of a rendered SRN; `url` is the article."""
     text = unescape(text)
     notice: Optional[Notice] = None
     status = None
     category = None
     synopsis_column = True
     title = None
+    heading = ""
+    confidential = False
+    findings: List[dict] = []
+    listed: Dict[str, Tuple[str, str]] = {}
+    headings: Dict[str, bool] = {}
+    prose: Set[str] = set()
     for line in text.splitlines():
         heading_title = TITLE.match(line.strip())
         if heading_title:
             title = heading_title.group(1)
+        if line.startswith("#"):
+            heading = line.lstrip("#").replace("*", "").strip()
+            if not FRAME.match(heading):
+                headings.setdefault(heading, False)
         # Without "List of" titles, the fixed issues follow the Solution section.
         if line.strip() == "## Solution" and title and not re.search(r"- List of", text, re.I) and ATTACHED not in text:
             notice = notice or Notice("evo" if title.endswith("-EVO") else "junos", title.replace("-EVO", ""))
-            status = "resolved"
+            status, confidential = "resolved", False
             continue
         section = SECTION.match(line.strip())
         if section:
             version = section.group(1)
             if "confidential" in section.group(3).lower():
-                status = None
+                status, confidential = None, True
+                headings.pop(heading, None)
+                findings.append(finding("left_out", "confidential", url, heading, [], "a part marked Confidential, never read"))
                 continue
             notice = notice or Notice("evo" if version.endswith("-EVO") else "junos", version.replace("-EVO", ""))
-            status = STATUSES[section.group(2).capitalize()]
+            status, confidential = STATUSES[section.group(2).capitalize()], False
+            headings[heading] = True
             continue
         if line.startswith("## "):
-            status = None
+            status, confidential = None, False
             continue
+        listing = LISTED_ROW.match(line)
+        if not listing:
+            prose.update(CITED.findall(line))
+        elif not confidential:
+            listed.setdefault(listing.group(1), (url, heading))
         if status is None:
             continue
-        heading = CATEGORY_ROW.match(line)
-        if heading:
-            synopsis_column = bool(heading.group(1))
-            category = heading.group(2).strip()
+        row_heading = CATEGORY_ROW.match(line)
+        if row_heading:
+            synopsis_column = bool(row_heading.group(1))
+            category = row_heading.group(2).strip()
             continue
         row = parse_row(line, category, synopsis_column)
         if not row:
+            if listing:
+                findings.append(finding("not_understood", "row_unknown", url, heading, [listing.group(1)],
+                                        "a row the code cannot split into synopsis and description"))
             continue
         if SECURITY.search(line):
-            notice.skipped += 1
+            findings.append(finding("left_out", "security", url, heading, [row["bug_id"]], "a security entry"))
             continue
         if INTERNAL_NOTE.search(row["description"]):
             row["description"] = ""
@@ -325,7 +379,9 @@ def parse_article(text: str) -> Notice:
     created = CREATED.search(text)
     notice.created = created.group(1) if created else None
     if not notice.items:
-        notice.warnings.append("no issue read")
+        findings.append(finding("not_understood", "no_issue", url, "", [], "no issue read in the article"))
+    notice.findings, notice.listed, notice.headings = findings, listed, headings
+    notice.prose = prose - set(listed)
     return notice
 
 
@@ -339,8 +395,8 @@ PDF_HEADER = {"PR", "Number", "Synopsis"}
 PDF_FURNITURE = re.compile(r"^(\d{1,2}/\d{1,2}/\d{2}, \d{1,2}:\d{2} [AP]M|Page \d+ of \d+|file:///.*|jtac-web\.\S+)$")
 
 
-def parse_srn_pdf(path: Path) -> Notice:
-    """Read the lists of a PDF copy of an SRN.
+def parse_srn_pdf(path: Path, url: str = "") -> Notice:
+    """Read the lists of a PDF copy of an SRN; `url` is the article it copies.
 
     Its description column is cut at the right margin, words missing: only the
     synopsis, complete, and the short "Resolved In" lines are kept.
@@ -355,12 +411,19 @@ def parse_srn_pdf(path: Path) -> Notice:
     entries: List[dict] = []
     current: Optional[dict] = None
     part = None
+    heading = ""
+    findings: List[dict] = []
+    listed: Dict[str, Tuple[str, str]] = {}
+    headings: Dict[str, bool] = {}
     for index, line in enumerate(lines):
         title = PDF_LIST_TITLE.match(line)
         if title:
+            heading = line
             if "confidential" in title.group(3).lower():
                 status = None
+                findings.append(finding("left_out", "confidential", url, heading, [], "a part marked Confidential, never read"))
                 continue
+            headings[heading] = True
             version = title.group(1)
             notice = notice or Notice("evo" if version.endswith("-EVO") else "junos", version.replace("-EVO", ""))
             status = STATUSES[title.group(2).capitalize()]
@@ -374,10 +437,12 @@ def parse_srn_pdf(path: Path) -> Notice:
         if line in PDF_HEADER:
             continue
         following = lines[index + 1] if index + 1 < len(lines) else ""
+        if PDF_ID.match(line):
+            listed.setdefault(line, (url, heading))
         # A PR number opens an entry, followed by its severity or its synopsis.
         if PDF_ID.match(line) and (part in (None, "description", "resolved") or PDF_SEVERITY.match(following)):
             current = {"bug_id": line, "category": category, "severity": None, "synopsis": [], "description": [],
-                       "resolved": [], "status": status, "raw": [line]}
+                       "resolved": [], "status": status, "raw": [line], "where": heading}
             entries.append(current)
             part = "synopsis"
             continue
@@ -399,7 +464,7 @@ def parse_srn_pdf(path: Path) -> Notice:
         raise ValueError("no list of fixed issues")
     for entry in entries:
         if SECURITY.search(" ".join(entry["raw"])):
-            notice.skipped += 1
+            findings.append(finding("left_out", "security", url, entry["where"], [entry["bug_id"]], "a security entry"))
             continue
         notice.items.append({
             "bug_id": entry["bug_id"],
@@ -411,5 +476,6 @@ def parse_srn_pdf(path: Path) -> Notice:
             "status": entry["status"],
         })
     if not notice.items:
-        notice.warnings.append("no issue read")
+        findings.append(finding("not_understood", "no_issue", url, "", [], "no issue read in the PDF copy"))
+    notice.findings, notice.listed, notice.headings = findings, listed, headings
     return notice

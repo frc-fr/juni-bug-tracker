@@ -154,6 +154,17 @@ details.notice p { margin: 6px 0 2px; }
 .legal h3 { margin: 18px 0 4px; font-size: 15px; }
 .legal p { margin: 0 0 8px; }
 .legal ul { margin: 0 0 8px; padding-left: 20px; }
+.report h4 { margin: 14px 0 4px; font-size: 14px; }
+.report-scroll { overflow-x: auto; margin: 6px 0 12px; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.report-table th, .report-table td { padding: 6px 10px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+.report-table thead th { border-top: 0; font-weight: 600; background: var(--bg); white-space: nowrap; }
+.report-table tbody th { font-weight: 400; }
+.report-help { display: block; color: var(--muted); font-size: 12px; }
+.report-ids { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; }
+.report-doc, .report-rule { border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; margin: 8px 0; background: var(--panel); }
+.report-doc > summary, .report-rule > summary { cursor: pointer; }
+.report-errors { margin: 0; padding-left: 18px; font-size: 12px; overflow-wrap: anywhere; }
 
 .notice { margin: 12px 0 0; padding: 9px 12px; border-radius: 6px; background: var(--potential-bg); color: var(--potential); font-size: 14px; }
 

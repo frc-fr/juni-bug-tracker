@@ -232,3 +232,43 @@ def test_suggested_releases_of_kb21476():
                            {"source": "s", "platforms": platforms})
     assert sorted(junos["models"]) == ["ACX500", "EX2200", "EX4300"]
     assert junos["general"] == [["MX Series", "Latest Junos 23.4R2-Sx", ["23.4R2-Sx"], "2025-06-17"]]
+
+
+def test_every_listed_pr_of_an_article_is_accounted_for():
+    article = ARTICLE.replace("## Modification History", "| [1700006](https://prsearch.juniper.net/PR1700006) Major | Cut | Cut |\n"
+                              "| 1700007 | Bare number | Bare number |\n## Modification History")
+    notice = parse_article(article, "https://article")
+    buckets = notice.accounting()
+    assert buckets["read"] == {"1793435", "1700002", "1700004"}
+    assert buckets["ruled"] == {"1700001"}
+    assert buckets["failed"] == {"1700006", "1700007"}
+    # A row under a title the code does not read; the Confidential part is never read, nor counted.
+    assert buckets["unaccounted"] == {"1700005"} and "1700003" not in notice.listed
+    assert notice.listed["1700005"] == ("https://article", "Modification History")
+    assert [f["rule"] for f in notice.findings] == ["security", "confidential", "row_unknown", "row_unknown"]
+    assert notice.headings == {"22.2R3-S7 - List of Fixed issues": True, "22.2R3-S7 - List of Known issues": True,
+                               "Modification History": False}
+    assert notice.skipped == 1 and notice.warnings
+
+
+def test_every_listed_pr_of_a_pdf_is_accounted_for(tmp_path):
+    import fitz
+    from junibugs.parser import parse_pdf
+    doc = fitz.open()
+    for text in ("Open Issues\n•\nThe rpd crashes. PR1000001\n•\nA vulnerability in rpd. PR1000002",
+                 "Known Issues\n•\nSomething breaks. PR1000003",
+                 "What's Changed\n•\nNew default—The device now drops it. PR1000004",
+                 "Revision History\n09 January 2026—Revision 1"):
+        doc.new_page().insert_text((50, 72), text)
+    doc.set_toc([[1, "Junos OS Release Notes for MX Series", 1], [2, "Open Issues", 1], [2, "Known Issues", 2],
+                 [2, "What's Changed", 3], [1, "Revision History", 4]])
+    doc.save(tmp_path / "notes.pdf")
+    document = parse_pdf(tmp_path / "notes.pdf", "https://pdf")
+    buckets = document.accounting()
+    assert buckets["read"] == {"1000001"}
+    assert buckets["ruled"] == {"1000002"}
+    assert buckets["failed"] == {"1000003"} and buckets["unaccounted"] == set()
+    assert document.listed["1000003"] == ("https://pdf#page=2", "MX Series / Known Issues")
+    assert [f["rule"] for f in document.findings] == ["security", "status_unknown"]
+    assert document.prose == {"1000004"} and document.released == "2026-01-09"
+    assert document.headings["Open Issues"] and not document.headings.get("Table of Contents", False)
