@@ -71,6 +71,7 @@ Section identique dans forti-, juni-, palo-, cisco- et f5-bug-tracker. Toute mod
 - Un bug à la fois correction et changement de comportement n'est compté qu'une fois.
 - Une version annoncée mais pas encore publiée est marquée « non publiée ».
 - Toutes les branches restent consultables ; les branches supportées sont mises en avant.
+- Une version choisie ne liste que les bugs cités dans les notes de sa branche ; les autres sont seulement comptés, avec un lien vers la recherche sans filtre de version.
 - Pas d'affirmation générale ou trop assurée dans les textes.
 
 ## Interface
