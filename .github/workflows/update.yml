@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 60
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_again.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -79,7 +79,20 @@ jobs:
         with:
           path: dist
 
+      # GitHub lists a new artifact a few seconds after its upload: deploying at once may not find it.
+      - name: Let GitHub register the site
+        run: sleep 10
+
       - id: deploy
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before deploying again
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 30
+
+      - id: deploy_again
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
 
       # After the publication: a red run asks for the code to be adapted, the site is already up to date.
