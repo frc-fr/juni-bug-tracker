@@ -495,10 +495,10 @@
       "version": "26.2R1",
       "branch": "26.2",
       "pdf_url": "https://networkingdocs.hpe.com/documentation/rne/us/en/release-notes/Junos%20OS/26.2R1/junos-os-release-notes-26.2r1.pdf",
-      "sha256": "e912ba2b15b3d0377127c36687644e320f241721d300a2a8c6045e5f4fd714a6",
-      "etag": "123072-66108a7325914",
-      "last_modified": "Tue, 24 Nov 2026 17:00:52 GMT",
-      "size": 1192050
+      "sha256": "8e41dbb2442c3b6afc4e79017d488b7f664e2378f820eea8cac61987c4d2152d",
+      "etag": "123216-6612f7ef8d1bb",
+      "last_modified": "Thu, 26 Nov 2026 15:21:21 GMT",
+      "size": 1192470
     }
   ]
 }
